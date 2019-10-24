@@ -1,0 +1,40 @@
+{
+  "name": "zutils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/zutils.esm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env ENV=development rollup -c -w",
+    "build": "cross-env ENV=production rollup -c",
+    "build:esm": "cross-env METHOD=esm rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhicaizhu123/Zutils.git"
+  },
+  "keywords": [
+    "utils",
+    "util",
+    "utils-plugin",
+    "工具类",
+    "工具函数"
+  ],
+  "author": {
+    "name": "Peter Chu",
+    "email": "zhicaizhu123@126.com"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "cross-env": "^6.0.3",
+    "rollup": "^1.24.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-uglify": "^6.0.3"
+  },
+  "dependencies": {
+    "zdatejs": "^1.0.4"
+  }
+}
