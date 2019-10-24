@@ -177,7 +177,7 @@ export function getTreeChainByKey(searchId, { id = "id" } = {}) {
  */
 export function array2Object(arr, key) {
   if (!arr.length) {
-    console.warning("传入数组为空");
+    console.warn("传入数组为空");
     return null;
   }
   return arr.reduce((acc, val, index) => {
@@ -195,7 +195,7 @@ export function array2Object(arr, key) {
  */
 export function arrayLike2Array(obj) {
   if (!isArrayLike(obj)) {
-    console.warning("当前传入数据不是类数组");
+    console.warn("当前传入数据不是类数组");
     return [];
   }
   return Array.from(obj);

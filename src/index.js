@@ -8,6 +8,7 @@ export { default as zurl } from "./url";
 export { default as zplatform } from "./platform";
 export { default as zstore } from "./store";
 export { default as zdate } from "./date";
+export { default as zevent } from "./event";
 
 export default {
   ...zutil,
@@ -19,5 +20,6 @@ export default {
   ...zurl,
   ...zplatform,
   ...zstore,
+  ...zevent,
   zdate
 };

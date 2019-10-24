@@ -9,9 +9,9 @@ const body = document.documentElement || document.body;
  * @param {*} el
  * @returns
  */
-export function getElement(el) {
+export function getElement(el, root = true) {
   if (el instanceof Window) {
-    return body;
+    return root ? body : window;
   } else if (isElement(el)) {
     return el;
   } else if (isString(el)) {
@@ -65,7 +65,7 @@ export function getElementOffsetTop(el, parent = body) {
   const parentEl = getElement(parent);
   if (!currentEl || !parentEl) return;
   if (!elementContains(parentEl, currentEl)) {
-    console.warning("目标元素属于提供元素的子元素");
+    console.warn("目标元素属于提供元素的子元素");
     return;
   }
   let isSetPosition = false;
@@ -102,10 +102,15 @@ export function scrollTo(el = body, position, isAnimate = true) {
   const currentEl = getElement(el);
   if (!currentEl) return;
   const step = position - currentEl.scrollTop > 0 ? 20 : -20;
+  let requestId = null;
   function scrollHandler() {
     if (isAnimate && step * (position - currentEl.scrollTop) > 0) {
-      currentEl.scrollTop += step;
-      requestAnimationFrame(scrollHandler);
+      if (step * (position - currentEl.scrollTop) > 0) {
+        currentEl.scrollTop += step;
+        requestId = requestAnimationFrame(scrollHandler);
+      } else {
+        cancelAnimationFrame(requestId);
+      }
     } else {
       currentEl.scrollTop = position;
     }
@@ -128,7 +133,7 @@ export function scrollToTarget(el = body, target, isAnimate = true) {
   if (!currentEl || !targetEl) return;
   const offsetTop = getElementOffsetTop(targetEl, currentEl);
   if (offsetTop === null) {
-    console.warning("目标元素属于提供元素的子元素");
+    console.warn("目标元素属于提供元素的子元素");
   } else {
     scrollTo(currentEl, offsetTop, isAnimate);
   }
@@ -173,7 +178,7 @@ export function addClass(el, className) {
   const currentEl = getElement(el);
   if (!currentEl) return;
   if (!isString(className)) {
-    console.warning("类名必须为字符串");
+    console.warn("类名必须为字符串");
     return;
   }
   if (el.classList) {
@@ -196,7 +201,7 @@ export function removeClass(el, className) {
   const currentEl = getElement(el);
   if (!currentEl) return;
   if (!isString(className)) {
-    console.warning("类名必须为字符串");
+    console.warn("类名必须为字符串");
     return;
   }
   if (el.classList) {
@@ -240,6 +245,8 @@ export function loadJs(url) {
 }
 
 export default {
+  addResizeListener,
+  removeResizeListener,
   getElement,
   getElementOffsetTop,
   elementContains,
