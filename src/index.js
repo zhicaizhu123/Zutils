@@ -1,22 +1,13 @@
-export { default as utils } from "./utils";
-import { default as type } from "./type";
-import { default as string } from "./string";
-import { default as html } from "./html";
-import { default as array } from "./array";
-import { default as object } from "./object";
-import { default as platform } from "./platform";
-import { default as store } from "./store";
-import { default as date } from "./date";
-
-export const zutil = utils;
-export const ztype = type;
-export const zstring = string;
-export const zhtml = html;
-export const zarray = array;
-export const zobject = object;
-export const zplatform = platform;
-export const zstore = store;
-export const zdate = date;
+export { default as zutil } from "./utils";
+export { default as ztype } from "./type";
+export { default as zstring } from "./string";
+export { default as zhtml } from "./html";
+export { default as zarray } from "./array";
+export { default as zobject } from "./object";
+export { default as zurl } from "./url";
+export { default as zplatform } from "./platform";
+export { default as zstore } from "./store";
+export { default as zdate } from "./date";
 
 export default {
   ...zutil,
@@ -25,6 +16,7 @@ export default {
   ...zhtml,
   ...zarray,
   ...zobject,
+  ...zurl,
   ...zplatform,
   ...zstore,
   zdate

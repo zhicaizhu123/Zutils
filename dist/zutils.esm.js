@@ -172,26 +172,9 @@ function syncPromise(promise, error) {
   });
 } // requestAnimationFrame和cancelAnimationFrame兼容封装
 
-var animationFrame = function () {
-  var animationTimer = null;
-
-  var request = function () {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-      animationTimer = setTimeout(callback, 1000 / 60);
-    };
-  }();
-
-  var cancel = function () {
-    return window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || function () {
-      clearTimeout(animationTimer);
-    };
-  }();
-
-  return {
-    request: request,
-    cancel: cancel
-  };
-}();
+var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+  animationTimer = setTimeout(callback, 1000 / 60);
+};
 /**
  * 延时函数
  *
@@ -310,7 +293,7 @@ var isWechat = isRule(/wechat/); // 是否为html字符串
 var isHtmlString = isRule(/html/); // 是否为img标签字符串
 
 var isImgTagString = isRule(/img/);
-var type = {
+var index$1 = {
   isType: isType,
   isRule: isRule,
   isObject: isObject,
@@ -510,7 +493,7 @@ function getAttrFromHtmlString() {
 function getPureTextFromHtmlString(source) {
   return source.replace(/<style[^>]*>[\d\D]*<\/style>|<[^>]*>/g, "");
 }
-var string = {
+var index$2 = {
   camelize: camelize,
   dasherize: dasherize,
   getTagfromHtmlString: getTagfromHtmlString,
@@ -518,61 +501,239 @@ var string = {
   getPureTextFromHtmlString: getPureTextFromHtmlString
 };
 
+var body = document.documentElement || document.body;
+/**
+ * 获取元素
+ *
+ * @param {*} el
+ * @returns
+ */
+
+function getElement(el) {
+  if (el instanceof Window) {
+    return body;
+  } else if (isElement(el)) {
+    return el;
+  } else if (isString(el)) {
+    var currentEl = document.querySelector(el);
+    return isElement(currentEl) ? currentEl : null;
+  }
+
+  console.warn("当前元素不存在");
+  return null;
+}
+/**
+ * 获取元素的样式
+ *
+ * @export
+ * @param {HTMLElement|string|Window} el
+ * @param {string} style
+ * @returns
+ */
+
+function getStyle(el, style) {
+  var currentEl = getElement(el);
+  if (!currentEl) return;
+  return currentEl.currentStyle ? currentEl.currentStyle[style] : getComputedStyle(currentEl)[style];
+}
+/**
+ * 判断一个元素是否为另一个元素的子元素
+ *
+ * @export
+ * @param {*} parent
+ * @param {*} child
+ * @returns
+ */
+
+function elementContains(parent, child) {
+  var childEl = getElement(child);
+  var parentEl = getElement(parent);
+  if (!childEl || !parentEl) return;
+  return parentEl.contains(childEl);
+}
 /**
  * 获取元素相对父元素的距离
  *
  * @export
- * @param {*} el
- * @param {*} parent
+ * @param {HTMLElement|string|Window} el
+ * @param {HTMLElement|string|Window} parent
  */
-function getElementDistance(el, parent) {}
+
+function getElementOffsetTop(el) {
+  var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : body;
+  var currentEl = getElement(el);
+  var parentEl = getElement(parent);
+  if (!currentEl || !parentEl) return;
+
+  if (!elementContains(parentEl, currentEl)) {
+    console.warning("目标元素属于提供元素的子元素");
+    return;
+  }
+
+  var isSetPosition = false;
+
+  if (getStyle(parentEl, "position") === "staic") {
+    parentEl.style.position = "relative";
+    isSetPosition = true;
+  }
+
+  var offsetTop = el.offsetTop;
+  var p = el.offsetParent;
+
+  while (p && p !== parentEl && parentEl.contains(p)) {
+    if (navigator.userAgent.indexOf("MSIE 8.0") === -1) {
+      offsetTop += p.clientTop;
+    }
+
+    offsetTop += p.offsetTop;
+    p = p.offsetParent;
+  }
+
+  if (isSetPosition) {
+    parentEl.style.position = "static";
+  }
+
+  return offsetTop;
+}
 /**
  * 设置元素滚动
  *
  * @export
- * @param {*} el
- * @param {*} [{ position = 0, target }={}]
+ * @param {HTMLElement|string|Window} [el=body] 滚动条所在元素
+ * @param {number} position 目标位置
+ * @param {boolean} [isAnimate=true] 是否使用动画
  */
 
-function scrollTo(el) {
-  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      _ref$position = _ref.position,
-      target = _ref.target;
+function scrollTo() {
+  var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
+  var position = arguments.length > 1 ? arguments[1] : undefined;
+  var isAnimate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  // offset > 0 => 目标位置再窗口顶部的上方
+  // offset < 0 => 目标位置再窗口顶部的下方
+  var currentEl = getElement(el);
+  if (!currentEl) return;
+  var step = position - currentEl.scrollTop > 0 ? 20 : -20;
+
+  function scrollHandler() {
+    if (isAnimate && step * (position - currentEl.scrollTop) > 0) {
+      currentEl.scrollTop += step;
+      requestAnimationFrame(scrollHandler);
+    } else {
+      currentEl.scrollTop = position;
+    }
+  }
+
+  scrollHandler();
+}
+/**
+ * 让目标元素滚动到滚动元素的可视范围
+ *
+ * @export
+ * @param {HTMLElement|string|Window} [el=body] 滚动元素
+ * @param {HTMLElement|string|Window} target 要滚动到的目标元素
+ * @param {boolean} [isAnimate=true]
+ * @returns
+ */
+
+function scrollToTarget() {
+  var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
+  var target = arguments.length > 1 ? arguments[1] : undefined;
+  var isAnimate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var currentEl = getElement(el);
+  var targetEl = getElement(target);
+  if (!currentEl || !targetEl) return;
+  var offsetTop = getElementOffsetTop(targetEl, currentEl);
+
+  if (offsetTop === null) {
+    console.warning("目标元素属于提供元素的子元素");
+  } else {
+    scrollTo(currentEl, offsetTop, isAnimate);
+  }
 }
 /**
  * 滚动到顶部
  *
  * @export
- * @param {*} el
+ * @param {HTMLElement|string|Window} [el=body] 滚动元素
+ * @param {boolean} [isAnimate=true] 是否启动动画
+ * @returns
  */
 
-function scrollToTop(el) {}
+function scrollToTop() {
+  var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
+  var isAnimate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var currentEl = getElement(el);
+  if (!currentEl) return;
+  scrollTo(currentEl, 0, isAnimate);
+}
 /**
  * 滚动到底部
  *
  * @export
- * @param {*} el
+ * @param {HTMLElement|string|Window} [el=body] 滚动元素
+ * @param {boolean} [isAnimate=true] 是否启动动画
+ * @returns
  */
 
-function scrollToBottom(el) {}
+function scrollToBottom() {
+  var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
+  var isAnimate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var currentEl = getElement(el);
+  if (!currentEl) return;
+  scrollTo(currentEl, currentEl.scrollHeight, isAnimate);
+}
 /**
  * 为元素添加类名
  *
  * @export
- * @param {*} el
- * @param {*} className
+ * @param {HTMLElement|string|Window} el
+ * @param {string} className
  */
 
-function addClass(el, className) {}
+function addClass(el, className) {
+  var currentEl = getElement(el);
+  if (!currentEl) return;
+
+  if (!isString(className)) {
+    console.warning("类名必须为字符串");
+    return;
+  }
+
+  if (el.classList) {
+    el.classList.add(className);
+  } else {
+    var list = className.match(/\b\w+\b/g);
+    list.push(className);
+    el.className = list.join(" ");
+  }
+}
 /**
  * 移除元素的类名
  *
  * @export
- * @param {*} el
- * @param {*} className
+ * @param {HTMLElement|string|Window} el
+ * @param {string} className
  */
 
-function removeClass(el, className) {}
+function removeClass(el, className) {
+  var currentEl = getElement(el);
+  if (!currentEl) return;
+
+  if (!isString(className)) {
+    console.warning("类名必须为字符串");
+    return;
+  }
+
+  if (el.classList) {
+    el.classList.remove(className);
+  } else {
+    var list = className.match(/\b\w+\b/g);
+    list = list.filter(function (item) {
+      return item !== className;
+    });
+    el.className = list.join(" ");
+  }
+}
 /**
  * 动态加载js文件
  *
@@ -603,11 +764,14 @@ function loadJs(url) {
     document.body.appendChild(script);
   });
 }
-var html = {
-  getElementDistance: getElementDistance,
+var index$3 = {
+  getElement: getElement,
+  getElementOffsetTop: getElementOffsetTop,
+  elementContains: elementContains,
   scrollTo: scrollTo,
   scrollToTop: scrollToTop,
   scrollToBottom: scrollToBottom,
+  scrollToTarget: scrollToTarget,
   addClass: addClass,
   removeClass: removeClass,
   loadJs: loadJs
@@ -693,7 +857,7 @@ function replaceKeys(obj) {
     return acc;
   }, {});
 }
-var object = {
+var index$4 = {
   clone: clone,
   deepClone: deepClone,
   extend: extend,
@@ -987,7 +1151,7 @@ function sample(arr) {
   var list = shuffe(arr);
   return list.slice(0, size);
 }
-var array = {
+var index$5 = {
   isArrayLike: isArrayLike,
   flatten: flatten,
   intersection: intersection,
@@ -1009,6 +1173,71 @@ var array = {
   sample: sample
 };
 
+/**
+ * 将链接参数转为JSON格式返回
+ *
+ * @export
+ * @param {string} url
+ * @returns
+ */
+function getParam2Json() {
+  var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
+  var search = url.substring(url.lastIndexOf("?") + 1);
+  var result = {};
+  var reg = /([^?&=]+)=([^?&=]*)/g;
+  search.replace(reg, function (res, $1, $2) {
+    var name = decodeURIComponent($1);
+    var val = decodeURIComponent($2);
+    val = String(val);
+    result[name] = val;
+    return res;
+  });
+  return result;
+}
+/**
+ * 获取链接指定字段名的值
+ *
+ * @export
+ * @param {string} url
+ * @param {Array|string} key 指定获取的字段名
+ * @returns {any} 如果参数key为数组则返回对象
+ */
+
+function getUrlParam(key) {
+  var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : location.href;
+  var params = getParam2Json(url);
+
+  if (Array.isArray(key)) {
+    var res = {};
+    key.forEach(function (item) {
+      res[item] = params[item];
+    });
+    return res;
+  } else if (typeof key === "string") {
+    return params[key];
+  }
+
+  return void 0;
+}
+/**
+ * @description 转换json为链接参数字符串
+ * @param {Object} json
+ * @returns {String}
+ */
+
+function getJson2Param(json) {
+  if (!json) return "";
+  return Object.keys(json).map(function (key) {
+    if (json[key] === void 0) return "";
+    return "".concat(encodeURIComponent(key), "=").concat(encodeURIComponent(json[key]));
+  }).join("&");
+}
+var index$6 = {
+  getParam2Json: getParam2Json,
+  getJson2Param: getJson2Param,
+  getUrlParam: getUrlParam
+};
+
 var isPlatform = function isPlatform(regexp) {
   return regexp.test(navigator.userAgent);
 };
@@ -1027,7 +1256,7 @@ var isWeibo = isPlatform(/weibo/gi);
 var isDevice = function isDevice(regexp) {
   return isPlatform(regexp);
 };
-var platform = {
+var index$7 = {
   isMobile: isMobile,
   isPc: isPc,
   isIPhone: isIPhone,
@@ -1042,7 +1271,7 @@ var platform = {
   isDevice: isDevice
 };
 
-var store = {};
+var index$8 = {};
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -1391,18 +1620,9 @@ function () {
   return ZDate;
 }();
 
-var zutil = utils;
-var ztype = type;
-var zstring = string;
-var zhtml = html;
-var zarray = array;
-var zobject = object;
-var zplatform = platform;
-var zstore = store;
-var zdate = Zdate;
-var index$1 = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, zplatform, {}, zstore, {
+var index$9 = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, zurl, {}, zplatform, {}, zstore, {
   zdate: zdate
 });
 
-export default index$1;
-export { index as utils, zarray, zdate, zhtml, zobject, zplatform, zstore, zstring, ztype, zutil };
+export default index$9;
+export { index$5 as zarray, Zdate as zdate, index$3 as zhtml, index$4 as zobject, index$7 as zplatform, index$8 as zstore, index$2 as zstring, index$1 as ztype, index$6 as zurl, index as zutil };

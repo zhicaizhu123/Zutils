@@ -81,34 +81,21 @@ export function syncPromise(promise, error) {
 }
 
 // requestAnimationFrame和cancelAnimationFrame兼容封装
-export const animationFrame = (function() {
-  let animationTimer = null;
-  const request = (function() {
-    return (
-      window.requestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      function(callback) {
-        animationTimer = setTimeout(callback, 1000 / 60);
-      }
-    );
-  })();
-
-  const cancel = (function() {
-    return (
-      window.cancelAnimationFrame ||
-      window.webkitCancelAnimationFrame ||
-      window.mozCancelAnimationFrame ||
-      function() {
-        clearTimeout(animationTimer);
-      }
-    );
-  })();
-  return {
-    request,
-    cancel
+export const requestAnimationFrame =
+  window.requestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  function(callback) {
+    animationTimer = setTimeout(callback, 1000 / 60);
   };
-})();
+
+export const cancelAnimationFrame =
+  window.cancelAnimationFrame ||
+  window.webkitCancelAnimationFrame ||
+  window.mozCancelAnimationFrame ||
+  function() {
+    clearTimeout(animationTimer);
+  };
 
 /**
  * 延时函数
