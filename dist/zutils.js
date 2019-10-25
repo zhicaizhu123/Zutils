@@ -114,252 +114,6 @@
   }
 
   /**
-   * 节流：用于有连续事件响应，每间隔一定时间触发一次
-   *
-   * @param {Function} func
-   * @param {number} wait 触发长度间隔时间
-   * @param {boolean} leading  leading=false首次不会触发(如果触发了多次)
-   * @returns
-   */
-  function throttle(func, interval, leading) {
-    var previous = 0;
-    var timer = null;
-
-    var handler = function handler(context, args) {
-      func.apply(context, args);
-    };
-
-    return function () {
-      var now = Date.now();
-
-      if (!previous && leading === false) {
-        previous = now;
-      }
-
-      var remaining = interval - (now - previous);
-      timer && clearTimeout(timer);
-
-      if (remaining <= 0) {
-        previous = now;
-        handler(this, arguments);
-      } else {
-        timer = setTimeout(handler, remaining, this, arguments);
-      }
-    };
-  }
-  /**
-   * 防抖：用于连续事件触发结束后只触发一次
-   *
-   * @param {Func} func
-   * @param {number} wait
-   * @param {boolean} immediate 是否已经执行
-   * @returns
-   */
-
-  function debounce(func, wait, immediate) {
-    var timer = null;
-
-    var handler = function handler(context, args) {
-      func.apply(context, args);
-    };
-
-    return function () {
-      if (immediate && !timer) {
-        handler(this, arguments);
-      }
-
-      timer && clearTimeout(timer);
-      timer = setTimeout(handler, wait, this, arguments);
-    };
-  }
-  /**
-   * 拦截Promise处理结果以数组形式返回信息，主要用于async/await
-   * 如果成功则返回的第一个元素（错误信息）为null，否则为错误信息
-   *
-   * 如：
-   * async function () {
-   *    const [err, res] = await syncPromise(promiseFunc)
-   *    if (!err) {
-   *      // 成功
-   *    } else {
-   *      // 失败
-   *    }
-   * }
-   *
-   * @export
-   * @param {Promise} promise
-   * @param {any} error
-   * @returns {Array} 第一个元素为错误信息，第二个元素为返回结果
-   */
-
-  function syncPromise(promise, error) {
-    return promise.then(function (data) {
-      return [null, data];
-    })["catch"](function (err) {
-      if (error) {
-        Object.assign(err, error);
-      }
-
-      return [err, undefined];
-    });
-  } // requestAnimationFrame和cancelAnimationFrame兼容封装
-
-  var requestAnimationFrame$1 = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-    animationTimer = setTimeout(callback, 1000 / 60);
-  };
-  var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || function () {
-    clearTimeout(animationTimer);
-  };
-  /**
-   * 延时函数
-   *
-   * @export
-   * @param {*} time
-   * @returns
-   */
-
-  function delay(time) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, time);
-    });
-  }
-  function compose() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    var start = args.length - 1; // 倒序调用
-
-    return function () {
-      var i = start;
-      var result = args[start].apply(this, args);
-
-      while (i--) {
-        result = args[i].call(this, result);
-      }
-
-      return result;
-    };
-  }
-  var index = {
-    throttle: throttle,
-    debounce: debounce,
-    syncPromise: syncPromise,
-    animationFrame: animationFrame,
-    delay: delay,
-    compose: compose
-  };
-
-  // 获取各数据数据类型
-  function isType(type) {
-    return function (val) {
-      return Object.prototype.toString.call(val) === "[object ".concat(type, "]");
-    };
-  } // 是否匹配提供的正则表达式规则
-
-  function isRule(rule) {
-    return function (val) {
-      return rule.test(val);
-    };
-  } // 判断是否为对象
-
-  function isObject(val) {
-    var type = _typeof(val);
-
-    return type === "function" || type === "object" && !!obj;
-  }
-  function isEmpty(val) {
-    return isNull(val) || isUndefined(val);
-  }
-  function isEmptyObject(val) {
-    return isObject(val) && JSON.stringify(val) == "{}";
-  } // 判断是否为数组
-
-  function isArray(val) {
-    return Array.isArray ? Array.isArray(val) : isType("Array")(val);
-  } // 判断是否为参数列
-
-  var isArguments = isType("Arguments"); // 判断是否为Null类型
-
-  var isNull = isType("Null"); // 判断是否为Number类型
-
-  var isNumber = isType("Number"); // 判断是否为String类型
-
-  var isString = isType("String"); // 判断是否为Function类型
-
-  var isFunction = isType("Function"); // 判断是否为Promise类型
-
-  var isPromise = isType("Promise"); // 判断是否为Date类型
-
-  var isDate = isType("Date"); // 判断是否为RegExp类型
-
-  var isRegExp = isType("RegExp"); // 判断是否为Map类型
-
-  var isMap = isType("Map"); // 判断是否为Set类型
-
-  var isSet = isType("Set"); // 判断是否为Symbol类型
-
-  var isSymbol = isType("Symbol"); // 判断是否为Error类型
-
-  var isError = isType("Error"); // 判断是否为Undefined类型
-
-  var isUndefined = isType("Undefined"); // 判断是否为NaN
-
-  function isNaN(val) {
-    return isNumber(val) && isNaN(val);
-  } // 判断是否为DOM元素
-
-  function isElement(val) {
-    return isObject(HTMLElement) ? val instanceof HTMLElement : isObject(val) && isString(val.nodeName) && val.nodeType === 1;
-  } // 是否为合法链接
-
-  var isLink = isRule(/link/); // 是否为合法邮箱
-
-  var isEMail = isRule(/email/); // 是否为合法手机号码
-
-  var isTel = isRule(/tel/); // 是否为合法身份证
-
-  var isIdCard = isRule(/idcard/); // 是否为合法QQ
-
-  var isQQ = isRule(/qq/); // 是否为合法微信
-
-  var isWechat = isRule(/wechat/); // 是否为html字符串
-
-  var isHtmlString = isRule(/html/); // 是否为img标签字符串
-
-  var isImgTagString = isRule(/img/);
-  var index$1 = {
-    isType: isType,
-    isRule: isRule,
-    isObject: isObject,
-    isEmptyObject: isEmptyObject,
-    isEmpty: isEmpty,
-    isArray: isArray,
-    isNumber: isNumber,
-    isString: isString,
-    isNull: isNull,
-    isUndefined: isUndefined,
-    isNaN: isNaN,
-    isArguments: isArguments,
-    isSet: isSet,
-    isMap: isMap,
-    isSymbol: isSymbol,
-    isPromise: isPromise,
-    isError: isError,
-    isDate: isDate,
-    isRegExp: isRegExp,
-    isElement: isElement,
-    isLink: isLink,
-    isEMail: isEMail,
-    isTel: isTel,
-    isWechat: isWechat,
-    isQQ: isQQ,
-    isIdCard: isIdCard,
-    isHtmlString: isHtmlString,
-    isImgTagString: isImgTagString
-  };
-
-  /**
    * 转化为驼峰值
    *
    * @export
@@ -548,13 +302,374 @@
       return hash[tag] || tag;
     });
   }
-  var index$2 = {
+  var index = {
     camelize: camelize,
     dasherize: dasherize,
     getTagfromHtmlString: getTagfromHtmlString,
     getAttrFromHtmlString: getAttrFromHtmlString,
     getPureTextFromHtmlString: getPureTextFromHtmlString,
     escapeHtml: escapeHtml
+  };
+
+  var ScreenFullAPIList = ["exitFullscreen", "requestFullscreen", "fullscreenElement", "fullscreenEnabled", "fullscreenchange", "fullscreenerror"];
+
+  var ScreenfullHash = function () {
+    var prefix = ["webkit", "", "moz", "ms"];
+
+    var _loop = function _loop(i) {
+      if (camelize("".concat(prefix[i]).concat(prefix[i] ? "-" : "").concat(ScreenFullAPIList[0])) in document) {
+        return {
+          v: ScreenFullAPIList.reduce(function (acc, val, index) {
+            acc[val] = camelize("".concat(prefix[i], "-").concat(ScreenFullAPIList[index]));
+            return acc;
+          }, {})
+        };
+      }
+    };
+
+    for (var i = 0; i < prefix.length; i++) {
+      var _ret = _loop(i);
+
+      if (_typeof(_ret) === "object") return _ret.v;
+    }
+  }();
+
+  var Screenfull =
+  /*#__PURE__*/
+  function () {
+    function Screenfull() {
+      _classCallCheck(this, Screenfull);
+    }
+
+    _createClass(Screenfull, [{
+      key: "exit",
+      value: function exit() {
+        var _this = this;
+
+        return new Promise(function (resolve, reject) {
+          if (!_this.isFullScreen) {
+            resolve();
+            return;
+          }
+
+          var exitCallback = function exitCallback() {
+            _this.off("fullscreenchange", exitCallback);
+
+            resolve();
+          };
+
+          _this.on("fullscreenchange", exitCallback);
+
+          resolve(document[ScreenfullHash["exitFullscreen"]]())["catch"](reject);
+        });
+      }
+    }, {
+      key: "request",
+      value: function request(el) {
+        var _this2 = this;
+
+        var element = el || document.documentElement || document.body;
+        return new Promise(function (resolve, reject) {
+          var requestCallback = function requestCallback() {
+            _this2.off("fullscreenchange", requestCallback);
+
+            resolve();
+          };
+
+          _this2.on("fullscreenchange", requestCallback);
+
+          resolve(element[ScreenfullHash["requestFullscreen"]]())["catch"](reject);
+        });
+      }
+    }, {
+      key: "toggle",
+      value: function toggle(el) {
+        return this.isFullscreen ? this.exit() : this.request(el);
+      }
+    }, {
+      key: "onChange",
+      value: function onChange(fn) {
+        this.on("fullscreenchange", fn);
+      }
+    }, {
+      key: "onError",
+      value: function onError(fn) {
+        this.on("fullscreenerror", fn);
+      }
+    }, {
+      key: "on",
+      value: function on(eventName, fn) {
+        document.addEventListener(ScreenfullHash[eventName], fn, false);
+      }
+    }, {
+      key: "off",
+      value: function off(eventName, fn) {
+        document.removeEventListener(ScreenfullHash[eventName], fn, false);
+      }
+    }, {
+      key: "isFullScreen",
+      get: function get() {
+        return document[ScreenfullHash["fullscreenElement"]] || docunent.fullscreen;
+      }
+    }, {
+      key: "isEnabled",
+      get: function get() {
+        document[ScreenfullHash["fullscreenEnabled"]];
+      }
+    }]);
+
+    return Screenfull;
+  }();
+
+  var Screenfull$1 = new Screenfull();
+
+  /**
+   * 节流：用于有连续事件响应，每间隔一定时间触发一次
+   *
+   * @param {Function} func
+   * @param {number} wait 触发长度间隔时间
+   * @param {boolean} leading  leading=false首次不会触发(如果触发了多次)
+   * @returns
+   */
+
+  function throttle(func, interval, leading) {
+    var previous = 0;
+    var timer = null;
+
+    var handler = function handler(context, args) {
+      func.apply(context, args);
+    };
+
+    return function () {
+      var now = Date.now();
+
+      if (!previous && leading === false) {
+        previous = now;
+      }
+
+      var remaining = interval - (now - previous);
+      timer && clearTimeout(timer);
+
+      if (remaining <= 0) {
+        previous = now;
+        handler(this, arguments);
+      } else {
+        timer = setTimeout(handler, remaining, this, arguments);
+      }
+    };
+  }
+  /**
+   * 防抖：用于连续事件触发结束后只触发一次
+   *
+   * @param {Func} func
+   * @param {number} wait
+   * @param {boolean} immediate 是否已经执行
+   * @returns
+   */
+
+  function debounce(func, wait, immediate) {
+    var timer = null;
+
+    var handler = function handler(context, args) {
+      func.apply(context, args);
+    };
+
+    return function () {
+      if (immediate && !timer) {
+        handler(this, arguments);
+      }
+
+      timer && clearTimeout(timer);
+      timer = setTimeout(handler, wait, this, arguments);
+    };
+  }
+  /**
+   * 拦截Promise处理结果以数组形式返回信息，主要用于async/await
+   * 如果成功则返回的第一个元素（错误信息）为null，否则为错误信息
+   *
+   * 如：
+   * async function () {
+   *    const [err, res] = await syncPromise(promiseFunc)
+   *    if (!err) {
+   *      // 成功
+   *    } else {
+   *      // 失败
+   *    }
+   * }
+   *
+   * @export
+   * @param {Promise} promise
+   * @param {any} error
+   * @returns {Array} 第一个元素为错误信息，第二个元素为返回结果
+   */
+
+  function syncPromise(promise, error) {
+    return promise.then(function (data) {
+      return [null, data];
+    })["catch"](function (err) {
+      if (error) {
+        Object.assign(err, error);
+      }
+
+      return [err, undefined];
+    });
+  } // requestAnimationFrame和cancelAnimationFrame兼容封装
+
+  var requestAnimationFrame$1 = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+    animationTimer = setTimeout(callback, 1000 / 60);
+  };
+  var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || function () {
+    clearTimeout(animationTimer);
+  };
+  /**
+   * 延时函数
+   *
+   * @export
+   * @param {*} time
+   * @returns
+   */
+
+  function delay(time) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, time);
+    });
+  }
+  function compose() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var start = args.length - 1; // 倒序调用
+
+    return function () {
+      var i = start;
+      var result = args[start].apply(this, args);
+
+      while (i--) {
+        result = args[i].call(this, result);
+      }
+
+      return result;
+    };
+  }
+  var screenfull = Screenfull$1;
+  var index$1 = {
+    throttle: throttle,
+    debounce: debounce,
+    syncPromise: syncPromise,
+    animationFrame: animationFrame,
+    delay: delay,
+    compose: compose,
+    screenfull: screenfull
+  };
+
+  // 获取各数据数据类型
+  function isType(type) {
+    return function (val) {
+      return Object.prototype.toString.call(val) === "[object ".concat(type, "]");
+    };
+  } // 是否匹配提供的正则表达式规则
+
+  function isRule(rule) {
+    return function (val) {
+      return rule.test(val);
+    };
+  } // 判断是否为对象
+
+  function isObject(val) {
+    var type = _typeof(val);
+
+    return type === "function" || type === "object" && !!obj;
+  }
+  function isEmpty(val) {
+    return isNull(val) || isUndefined(val);
+  }
+  function isEmptyObject(val) {
+    return isObject(val) && JSON.stringify(val) == "{}";
+  } // 判断是否为数组
+
+  function isArray(val) {
+    return Array.isArray ? Array.isArray(val) : isType("Array")(val);
+  } // 判断是否为参数列
+
+  var isArguments = isType("Arguments"); // 判断是否为Null类型
+
+  var isNull = isType("Null"); // 判断是否为Number类型
+
+  var isNumber = isType("Number"); // 判断是否为String类型
+
+  var isString = isType("String"); // 判断是否为Function类型
+
+  var isFunction = isType("Function"); // 判断是否为Promise类型
+
+  var isPromise = isType("Promise"); // 判断是否为Date类型
+
+  var isDate = isType("Date"); // 判断是否为RegExp类型
+
+  var isRegExp = isType("RegExp"); // 判断是否为Map类型
+
+  var isMap = isType("Map"); // 判断是否为Set类型
+
+  var isSet = isType("Set"); // 判断是否为Symbol类型
+
+  var isSymbol = isType("Symbol"); // 判断是否为Error类型
+
+  var isError = isType("Error"); // 判断是否为Undefined类型
+
+  var isUndefined = isType("Undefined"); // 判断是否为NaN
+
+  function isNaN(val) {
+    return isNumber(val) && isNaN(val);
+  } // 判断是否为DOM元素
+
+  function isElement(val) {
+    return isObject(HTMLElement) ? val instanceof HTMLElement : isObject(val) && isString(val.nodeName) && val.nodeType === 1;
+  } // 是否为合法链接
+
+  var isLink = isRule(/link/); // 是否为合法邮箱
+
+  var isEMail = isRule(/email/); // 是否为合法手机号码
+
+  var isTel = isRule(/tel/); // 是否为合法身份证
+
+  var isIdCard = isRule(/idcard/); // 是否为合法QQ
+
+  var isQQ = isRule(/qq/); // 是否为合法微信
+
+  var isWechat = isRule(/wechat/); // 是否为html字符串
+
+  var isHtmlString = isRule(/html/); // 是否为img标签字符串
+
+  var isImgTagString = isRule(/img/);
+  var index$2 = {
+    isType: isType,
+    isRule: isRule,
+    isObject: isObject,
+    isEmptyObject: isEmptyObject,
+    isEmpty: isEmpty,
+    isArray: isArray,
+    isNumber: isNumber,
+    isString: isString,
+    isNull: isNull,
+    isUndefined: isUndefined,
+    isNaN: isNaN,
+    isArguments: isArguments,
+    isSet: isSet,
+    isMap: isMap,
+    isSymbol: isSymbol,
+    isPromise: isPromise,
+    isError: isError,
+    isDate: isDate,
+    isRegExp: isRegExp,
+    isElement: isElement,
+    isLink: isLink,
+    isEMail: isEMail,
+    isTel: isTel,
+    isWechat: isWechat,
+    isQQ: isQQ,
+    isIdCard: isIdCard,
+    isHtmlString: isHtmlString,
+    isImgTagString: isImgTagString
   };
 
   var body = document.documentElement || document.body;
@@ -3486,10 +3601,10 @@
   exports.zobject = index$4;
   exports.zplatform = index$8;
   exports.zsession = zsession$1;
-  exports.zstring = index$2;
-  exports.ztype = index$1;
+  exports.zstring = index;
+  exports.ztype = index$2;
   exports.zurl = index$7;
-  exports.zutil = index;
+  exports.zutil = index$1;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

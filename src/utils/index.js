@@ -1,3 +1,5 @@
+import Screenfull from "./screenfull";
+
 /**
  * 节流：用于有连续事件响应，每间隔一定时间触发一次
  *
@@ -120,11 +122,14 @@ export function compose(...args) {
   };
 }
 
+export const screenfull = Screenfull;
+
 export default {
   throttle,
   debounce,
   syncPromise,
   animationFrame,
   delay,
-  compose
+  compose,
+  screenfull
 };
