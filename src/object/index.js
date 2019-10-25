@@ -1,18 +1,52 @@
+import { isObject } from "../type";
+
 /**
  * 克隆对象
  *
  * @export
- * @param {*} data
+ * @param {*} origin 需要克隆的原对象
+ * @param {*} target 克隆结果
+ * @returns
  */
-export function clone(data) {}
+export function clone(origin, target) {
+  const result = target || {};
+  for (let prop in origin) {
+    if (origin.hasOwnProperty(prop)) {
+      result[prop] = origin[prop];
+    }
+  }
+  return result;
+}
 
 /**
  * 深克隆对象
  *
  * @export
- * @param {*} data
+ * @param {*} obj
+ * @param {*} [hash=new WeakMap()]
+ * @returns
  */
-export function deepClone(data) {}
+export function deepClone(data, weak = new WeakMap()) {
+  if (typeof data !== "object" || data === null) return data;
+  let result;
+  const Constructor = data.constructor;
+  switch (Constructor) {
+    case RegExp:
+      result = new Constructor(data);
+      break;
+    case Date:
+      result = new Constructor(data.getTime());
+      break;
+    default:
+      if (weak.has(data)) return weak.get(data);
+      result = new Constructor();
+      weak.set(data, result);
+  }
+  for (let key in data) {
+    result[key] = isObject(data[key]) ? deepClone(data[key], weak) : data[key];
+  }
+  return result;
+}
 
 /**
  * 合并对象
