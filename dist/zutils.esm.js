@@ -1709,6 +1709,7 @@ var index$6 = {
  * @param {string} url
  * @returns
  */
+
 function getParam2Json() {
   var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
   var search = url.substring(url.lastIndexOf("?") + 1);
@@ -1761,10 +1762,40 @@ function getJson2Param(json) {
     return "".concat(encodeURIComponent(key), "=").concat(encodeURIComponent(json[key]));
   }).join("&");
 }
+function addParam2Url() {
+  var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
+  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var path = url.split("?")[0];
+  var json = getParam2Json(url);
+  var paramStr = getJson2Param(_objectSpread2({}, json, {}, params));
+  return "".concat(path, "?").concat(paramStr);
+}
+/**
+ * 删除链接指定的参数
+ *
+ * @export
+ * @param {string} [url=location.href]
+ * @param {string|Array} [params=""]
+ * 如果为字符串时，多个参数需要用英文','分割，如果不传或者传的时空字符串或者空数组则删除全部参数
+ * @returns
+ */
+
+function removeParamFromUrl() {
+  var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
+  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  var path = url.split("?")[0];
+  if (!params || Array.isArray(params) && !params.length) return path;
+  var json = getParam2Json(url);
+  json = removeKeys(json, Array.isArray(params) ? params : /\b\w+\b/g.match(params));
+  var paramStr = getJson2Param(json);
+  return "".concat(path, "?").concat(paramStr);
+}
 var index$7 = {
   getParam2Json: getParam2Json,
   getJson2Param: getJson2Param,
-  getUrlParam: getUrlParam
+  getUrlParam: getUrlParam,
+  addParam2Url: addParam2Url,
+  removeParamFromUrl: removeParamFromUrl
 };
 
 var isPlatform = function isPlatform(regexp) {

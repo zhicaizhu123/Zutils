@@ -1,3 +1,5 @@
+import { removeKeys } from "../object";
+
 /**
  * 将链接参数转为JSON格式返回
  *
@@ -56,8 +58,38 @@ export function getJson2Param(json) {
     .join("&");
 }
 
+export function addParam2Url(url = location.href, params = {}) {
+  const path = url.split("?")[0];
+  let json = getParam2Json(url);
+  const paramStr = getJson2Param({ ...json, ...params });
+  return `${path}?${paramStr}`;
+}
+
+/**
+ * 删除链接指定的参数
+ *
+ * @export
+ * @param {string} [url=location.href]
+ * @param {string|Array} [params=""]
+ * 如果为字符串时，多个参数需要用英文','分割，如果不传或者传的时空字符串或者空数组则删除全部参数
+ * @returns
+ */
+export function removeParamFromUrl(url = location.href, params = "") {
+  const path = url.split("?")[0];
+  if (!params || (Array.isArray(params) && !params.length)) return path;
+  let json = getParam2Json(url);
+  json = removeKeys(
+    json,
+    Array.isArray(params) ? params : /\b\w+\b/g.match(params)
+  );
+  const paramStr = getJson2Param(json);
+  return `${path}?${paramStr}`;
+}
+
 export default {
   getParam2Json,
   getJson2Param,
-  getUrlParam
+  getUrlParam,
+  addParam2Url,
+  removeParamFromUrl
 };
