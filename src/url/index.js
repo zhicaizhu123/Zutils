@@ -58,6 +58,14 @@ export function getJson2Param(json) {
     .join("&");
 }
 
+/**
+ * 添加参数到链接上
+ *
+ * @export
+ * @param {string} [url=location.href]
+ * @param {object} [params={}] 需要添加的参数
+ * @returns
+ */
 export function addParam2Url(url = location.href, params = {}) {
   const path = url.split("?")[0];
   let json = getParam2Json(url);

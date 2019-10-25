@@ -534,6 +534,14 @@
       setTimeout(resolve, time);
     });
   }
+  /**
+   * 组合函数
+   *
+   * @export
+   * @param {*} args
+   * @returns
+   */
+
   function compose() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
@@ -552,6 +560,41 @@
       return result;
     };
   }
+  /**
+   * 复制到剪切板
+   *
+   * @export
+   * @param {string} str 需要复制的文本
+   * @returns
+   */
+
+  function copy(str) {
+    return new Promise(function (resolve, reject) {
+      var el = document.createElement("textarea");
+      el.value = str;
+      el.setAttribute("readonly", "");
+      el.style.position = "absolute";
+      el.style.left = "-9999px";
+      document.body.appendChild(el);
+      var selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
+      el.select();
+      var isSuccess = false;
+
+      if (document.execCommand && document.execCommand("copy")) {
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        isSuccess = true;
+      }
+
+      if (selected) {
+        document.getSelection().removeAllRanges();
+        document.getSelection().addRange(selected);
+      }
+
+      isSuccess ? resolve() : reject("当前浏览器不支持复制API");
+    });
+  } // 全屏功能
+
   var screenfull = Screenfull$1;
   var index$1 = {
     throttle: throttle,
@@ -560,6 +603,7 @@
     animationFrame: animationFrame,
     delay: delay,
     compose: compose,
+    copy: copy,
     screenfull: screenfull
   };
 
@@ -1884,6 +1928,15 @@
       return "".concat(encodeURIComponent(key), "=").concat(encodeURIComponent(json[key]));
     }).join("&");
   }
+  /**
+   * 添加参数到链接上
+   *
+   * @export
+   * @param {string} [url=location.href]
+   * @param {object} [params={}] 需要添加的参数
+   * @returns
+   */
+
   function addParam2Url() {
     var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
     var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};

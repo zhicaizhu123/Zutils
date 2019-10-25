@@ -112,6 +112,13 @@ export function delay(time) {
   });
 }
 
+/**
+ * 组合函数
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
 export function compose(...args) {
   const start = args.length - 1; // 倒序调用
   return function() {
@@ -122,6 +129,41 @@ export function compose(...args) {
   };
 }
 
+/**
+ * 复制到剪切板
+ *
+ * @export
+ * @param {string} str 需要复制的文本
+ * @returns
+ */
+export function copy(str) {
+  return new Promise((resolve, reject) => {
+    const el = document.createElement("textarea");
+    el.value = str;
+    el.setAttribute("readonly", "");
+    el.style.position = "absolute";
+    el.style.left = "-9999px";
+    document.body.appendChild(el);
+    const selected =
+      document.getSelection().rangeCount > 0
+        ? document.getSelection().getRangeAt(0)
+        : false;
+    el.select();
+    let isSuccess = false;
+    if (document.execCommand && document.execCommand("copy")) {
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      isSuccess = true;
+    }
+    if (selected) {
+      document.getSelection().removeAllRanges();
+      document.getSelection().addRange(selected);
+    }
+    isSuccess ? resolve() : reject("当前浏览器不支持复制API");
+  });
+}
+
+// 全屏功能
 export const screenfull = Screenfull;
 
 export default {
@@ -131,5 +173,6 @@ export default {
   animationFrame,
   delay,
   compose,
+  copy,
   screenfull
 };
