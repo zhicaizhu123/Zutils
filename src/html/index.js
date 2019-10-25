@@ -167,6 +167,16 @@ export function scrollToBottom(el = body, isAnimate = true) {
   scrollTo(currentEl, currentEl.scrollHeight, isAnimate);
 }
 
+function checkClassNameType(el, className) {
+  const currentEl = getElement(el);
+  if (!currentEl) return;
+  if (className && !isString(className)) {
+    console.warn("类名必须为字符串请不能为空");
+    return;
+  }
+  return className;
+}
+
 /**
  * 为元素添加类名
  *
@@ -175,17 +185,13 @@ export function scrollToBottom(el = body, isAnimate = true) {
  * @param {string} className
  */
 export function addClass(el, className) {
-  const currentEl = getElement(el);
-  if (!currentEl) return;
-  if (!isString(className)) {
-    console.warn("类名必须为字符串");
-    return;
-  }
+  const xlassName = checkClassNameType(el, className);
+  if (!xlassName) return;
   if (el.classList) {
-    el.classList.add(className);
+    el.classList.add(xlassName);
   } else {
-    const list = className.match(/\b\w+\b/g);
-    list.push(className);
+    const list = xlassName.match(/\b\w+\b/g);
+    list ? list.push(xlassName) : [];
     el.className = list.join(" ");
   }
 }
@@ -198,19 +204,33 @@ export function addClass(el, className) {
  * @param {string} className
  */
 export function removeClass(el, className) {
-  const currentEl = getElement(el);
-  if (!currentEl) return;
-  if (!isString(className)) {
-    console.warn("类名必须为字符串");
-    return;
-  }
+  const xlassName = checkClassNameType(el, className);
+  if (!xlassName) return;
   if (el.classList) {
-    el.classList.remove(className);
+    el.classList.remove(xlassName);
   } else {
-    let list = className.match(/\b\w+\b/g);
-    list = list.filter(item => item !== className);
+    let list = xlassName.match(/\b\w+\b/g);
+    list = list ? list.filter(item => item !== xlassName) : [];
     el.className = list.join(" ");
   }
+}
+
+/**
+ * 判断是否含有某个类
+ *
+ * @export
+ * @param {HTMLElement|string|Window} el
+ * @param {string} className
+ * @returns
+ */
+export function hasClass(el, className) {
+  const xlassName = checkClassNameType(el, className);
+  if (!xlassName) return false;
+  if (el.classList) {
+    return el.classList.contains(xlassName);
+  }
+  let list = xlassName.match(/\b\w+\b/g);
+  return list && list.includes(xlassName);
 }
 
 /**
@@ -256,5 +276,6 @@ export default {
   scrollToTarget,
   addClass,
   removeClass,
+  hasClass,
   loadJs
 };

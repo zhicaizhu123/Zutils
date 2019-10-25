@@ -286,14 +286,20 @@ export function shuffe(arr) {
   const list = [...arr];
   let len = list.length;
   while (len) {
-    const i = (Math.floor(Math.random() * len--)[(list[len], list[i])] = [
-      list[i],
-      list[len]
-    ]);
+    const i = Math.floor(Math.random() * len--);
+    [list[len], list[i]] = [list[i], list[len]];
   }
   return list;
 }
 
+/**
+ * 随机出去数组数据
+ *
+ * @export
+ * @param {Array} arr
+ * @param {number} [size=1]
+ * @returns
+ */
 export function sample(arr, size = 1) {
   const list = shuffe(arr);
   return list.slice(0, size);

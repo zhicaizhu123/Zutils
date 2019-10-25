@@ -138,10 +138,29 @@ export function getPureTextFromHtmlString(source) {
   return source.replace(/<style[^>]*>[\d\D]*<\/style>|<[^>]*>/g, "");
 }
 
+/**
+ * 转义html
+ *
+ * @export
+ * @param {string} str
+ * @returns
+ */
+export function escapeHtml(str) {
+  const hash = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "'": "&#39;",
+    '"': "&quot;"
+  };
+  return str.replace(/[&<>'"]/g, tag => hash[tag] || tag);
+}
+
 export default {
   camelize,
   dasherize,
   getTagfromHtmlString,
   getAttrFromHtmlString,
-  getPureTextFromHtmlString
+  getPureTextFromHtmlString,
+  escapeHtml
 };
