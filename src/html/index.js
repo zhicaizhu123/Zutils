@@ -268,6 +268,7 @@ export default {
   addResizeListener,
   removeResizeListener,
   getElement,
+  getStyle,
   getElementOffsetTop,
   elementContains,
   scrollTo,

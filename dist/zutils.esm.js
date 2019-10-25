@@ -848,6 +848,7 @@ var index$3 = {
   addResizeListener: addResizeListener,
   removeResizeListener: removeResizeListener,
   getElement: getElement,
+  getStyle: getStyle,
   getElementOffsetTop: getElementOffsetTop,
   elementContains: elementContains,
   scrollTo: scrollTo,
