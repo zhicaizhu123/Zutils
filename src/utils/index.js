@@ -163,6 +163,50 @@ export function copy(str) {
   });
 }
 
+// 是否匹配提供的正则表达式规则
+export function isRule(rule) {
+  return function(val) {
+    return rule.test(val);
+  };
+}
+
+// 是否为合法链接
+export const isLink = isRule(
+  /((https|http|ftp|rtsp|mms)?:\/\/)(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+\.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)/
+);
+
+// 是否为合法邮箱
+export const isEMail = isRule(
+  /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+);
+
+// 是否为合法手机号码
+export const isTel = isRule(/^(\+?0?86-?)?1(3|4|5|6|7|8|9)\d{9}$/);
+
+// 是否为合法固话
+export const isLandline = isRule(/^(\d{3,4}-)?\d{7,8}$/);
+
+// 是否为合法身份证
+export const isIdCard = isRule(/(^\d{15}$)|(^\d{17}([0-9xX])$)/);
+
+// 是否为合法QQ
+export const isQQ = isRule(/^[1-9][0-9]{4,11}$/);
+
+// 是否为合法微信
+export const isWechat = isRule(/^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/);
+
+// 是否为邮政编码
+export const isPost = isRule(/^[1-9]\d{5}(?!\d)$/);
+
+// 是否为汉字
+export const isCharacters = isRule(/^[\u4e00-\u9fa5]+$/);
+
+// 是否为格式化日期格式
+export const isFormatDate = (val, tag = "-") => {
+  const reg = new RegExp(`/^\d{4}${tg}\d{1,2}${tg}\d{1,2}$/`);
+  return isRule(reg)(val);
+};
+
 // 全屏功能
 export const screenfull = Screenfull;
 
@@ -174,5 +218,16 @@ export default {
   delay,
   compose,
   copy,
+  isRule,
+  isLink,
+  isEMail,
+  isTel,
+  isLandline,
+  isWechat,
+  isQQ,
+  isIdCard,
+  isPost,
+  isCharacters,
+  isFormatDate,
   screenfull
 };

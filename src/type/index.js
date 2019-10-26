@@ -5,13 +5,6 @@ export function isType(type) {
   };
 }
 
-// 是否匹配提供的正则表达式规则
-export function isRule(rule) {
-  return function(val) {
-    return rule.test(val);
-  };
-}
-
 // 判断是否为对象
 export function isObject(val) {
   const type = typeof val;
@@ -80,33 +73,8 @@ export function isElement(val) {
     : isObject(val) && isString(val.nodeName) && val.nodeType === 1;
 }
 
-// 是否为合法链接
-export const isLink = isRule(/link/);
-
-// 是否为合法邮箱
-export const isEMail = isRule(/email/);
-
-// 是否为合法手机号码
-export const isTel = isRule(/tel/);
-
-// 是否为合法身份证
-export const isIdCard = isRule(/idcard/);
-
-// 是否为合法QQ
-export const isQQ = isRule(/qq/);
-
-// 是否为合法微信
-export const isWechat = isRule(/wechat/);
-
-// 是否为html字符串
-export const isHtmlString = isRule(/html/);
-
-// 是否为img标签字符串
-export const isImgTagString = isRule(/img/);
-
 export default {
   isType,
-  isRule,
   isObject,
   isEmptyObject,
   isEmpty,
@@ -124,13 +92,5 @@ export default {
   isError,
   isDate,
   isRegExp,
-  isElement,
-  isLink,
-  isEMail,
-  isTel,
-  isWechat,
-  isQQ,
-  isIdCard,
-  isHtmlString,
-  isImgTagString
+  isElement
 };
