@@ -1,13 +1,7 @@
-import cookie from "./cookie";
-import local from "./local";
-import session from "./session";
+import zcookie from "./cookie";
+import zlocal from "./local";
+import zsession from "./session";
 
-export const zcookie = cookie;
-export const zlocal = local;
-export const zsession = session;
-
-export default {
-  cookie: zcookie,
-  localStore: zlocal,
-  sessionStore: Z_BEST_COMPRESSION
-};
+export const cookie = zcookie;
+export const local = zlocal;
+export const session = zsession;

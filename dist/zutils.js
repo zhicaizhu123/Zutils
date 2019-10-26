@@ -302,7 +302,7 @@
       return hash[tag] || tag;
     });
   };
-  var index = {
+  var string = {
     camelize: camelize,
     dasherize: dasherize,
     getTagfromHtmlString: getTagfromHtmlString,
@@ -625,11 +625,12 @@
   }; // 全屏功能
 
   var screenfull = Screenfull$1;
-  var index$1 = {
+  var util = {
     throttle: throttle,
     debounce: debounce,
     syncPromise: syncPromise,
-    animationFrame: animationFrame,
+    requestAnimationFrame: requestAnimationFrame$1,
+    cancelAnimationFrame: cancelAnimationFrame,
     delay: delay,
     compose: compose,
     copy: copy,
@@ -703,7 +704,7 @@
   var isElement = function isElement(val) {
     return isObject(HTMLElement) ? val instanceof HTMLElement : isObject(val) && isString(val.nodeName) && val.nodeType === 1;
   };
-  var index$2 = {
+  var type = {
     isType: isType,
     isObject: isObject,
     isEmptyObject: isEmptyObject,
@@ -1021,7 +1022,7 @@
       document.body.appendChild(script);
     });
   };
-  var index$3 = {
+  var html = {
     getElement: getElement,
     getStyle: getStyle,
     getElementOffsetTop: getElementOffsetTop,
@@ -1163,7 +1164,7 @@
       return acc;
     }, {});
   };
-  var index$4 = {
+  var object = {
     clone: clone,
     deepClone: deepClone,
     extend: extend,
@@ -1480,7 +1481,7 @@
     var list = shuffe(arr);
     return list.slice(0, size);
   };
-  var index$5 = {
+  var array = {
     isArrayLike: isArrayLike,
     flatten: flatten,
     intersection: intersection,
@@ -1956,7 +1957,7 @@
   }; // bigInteger类型处理
 
   var bigInt = BigNumber;
-  var index$6 = {
+  var number = {
     sum: sum,
     average: average,
     min: min,
@@ -2065,7 +2066,7 @@
     var paramStr = getJson2Param(json);
     return paramStr ? "".concat(path, "?").concat(paramStr) : path;
   };
-  var index$7 = {
+  var url = {
     getParam2Json: getParam2Json,
     getJson2Param: getJson2Param,
     getUrlParam: getUrlParam,
@@ -2078,7 +2079,7 @@
   };
 
   var isMobile = isPlatform(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i);
-  var isPc = !isMobile();
+  var isPc = !isMobile;
   var isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
   var isIPad = isPlatform(/iPad/gi);
   var isAndroid = isPlatform(/android|adr/gi);
@@ -2091,7 +2092,7 @@
   var isDevice = function isDevice(regexp) {
     return isPlatform(regexp);
   };
-  var index$8 = {
+  var platform = {
     isMobile: isMobile,
     isPc: isPc,
     isIOS: isIOS,
@@ -2162,7 +2163,7 @@
     getHanlder();
   };
 
-  var cookie = {
+  var zcookie = {
     defaults: defaults,
     set: set,
     get: get,
@@ -2322,14 +2323,9 @@
     return Storage;
   }();
 
-  var zcookie$1 = cookie;
-  var zlocal$1 = localStore;
-  var zsession$1 = sessionStore;
-  ({
-    cookie: zcookie$1,
-    localStore: zlocal$1,
-    sessionStore: Z_BEST_COMPRESSION
-  });
+  var cookie = zcookie;
+  var local = localStore;
+  var session = sessionStore;
 
   function _classCallCheck$1(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -3597,7 +3593,7 @@
       };
   });
 
-  var index$9 = (function () {
+  var index = (function () {
       // Export existing implementation if available.
       if (typeof global$1.ResizeObserver !== 'undefined') {
           return global$1.ResizeObserver;
@@ -3706,7 +3702,7 @@
 
     if (!el.__resizeListeners__) {
       el.__resizeListeners__ = [];
-      el.__ro__ = new index$9(resizeHandler);
+      el.__ro__ = new index(resizeHandler);
 
       el.__ro__.observe(el);
     }
@@ -3733,31 +3729,45 @@
     }
   };
   var observer = Observer$1;
-  var index$a = {
+  var event = {
     addResizeListener: addResizeListener,
     removeResizeListener: removeResizeListener,
     observer: observer
   };
 
-  var index$b = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, zurl, {}, zplatform, {}, zcookie, {}, zlocal, {}, zsession, {}, zevent, {
-    zdate: zdate
+  var zutil = util;
+  var ztype = type;
+  var zstring = string;
+  var zhtml = html;
+  var zarray = array;
+  var zobject = object;
+  var znumber = number;
+  var zurl = url;
+  var zplatform = platform;
+  var zcookie$1 = cookie;
+  var zlocal = local;
+  var zsession = session;
+  var zevent = event;
+  var zdate = Zdate;
+  var index$1 = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, znumber, {}, zurl, {}, zplatform, {}, zcookie$1, {}, zlocal, {}, zsession, {}, zevent, {
+    zdate: Zdate
   });
 
-  exports.default = index$b;
-  exports.zarray = index$5;
+  exports.default = index$1;
+  exports.zarray = zarray;
   exports.zcookie = zcookie$1;
-  exports.zdate = Zdate;
-  exports.zevent = index$a;
-  exports.zhtml = index$3;
-  exports.zlocal = zlocal$1;
-  exports.znumber = index$6;
-  exports.zobject = index$4;
-  exports.zplatform = index$8;
-  exports.zsession = zsession$1;
-  exports.zstring = index;
-  exports.ztype = index$2;
-  exports.zurl = index$7;
-  exports.zutil = index$1;
+  exports.zdate = zdate;
+  exports.zevent = zevent;
+  exports.zhtml = zhtml;
+  exports.zlocal = zlocal;
+  exports.znumber = znumber;
+  exports.zobject = zobject;
+  exports.zplatform = zplatform;
+  exports.zsession = zsession;
+  exports.zstring = zstring;
+  exports.ztype = ztype;
+  exports.zurl = zurl;
+  exports.zutil = zutil;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

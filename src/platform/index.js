@@ -6,7 +6,7 @@ export const isMobile = isPlatform(
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
 );
 
-export const isPc = !isMobile();
+export const isPc = !isMobile;
 
 export const isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 

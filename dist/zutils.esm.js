@@ -296,7 +296,7 @@ var escapeHtml = function escapeHtml(str) {
     return hash[tag] || tag;
   });
 };
-var index = {
+var string = {
   camelize: camelize,
   dasherize: dasherize,
   getTagfromHtmlString: getTagfromHtmlString,
@@ -619,11 +619,12 @@ var isFormatDate = function isFormatDate(val) {
 }; // 全屏功能
 
 var screenfull = Screenfull$1;
-var index$1 = {
+var util = {
   throttle: throttle,
   debounce: debounce,
   syncPromise: syncPromise,
-  animationFrame: animationFrame,
+  requestAnimationFrame: requestAnimationFrame$1,
+  cancelAnimationFrame: cancelAnimationFrame,
   delay: delay,
   compose: compose,
   copy: copy,
@@ -697,7 +698,7 @@ var isNaN = function isNaN(val) {
 var isElement = function isElement(val) {
   return isObject(HTMLElement) ? val instanceof HTMLElement : isObject(val) && isString(val.nodeName) && val.nodeType === 1;
 };
-var index$2 = {
+var type = {
   isType: isType,
   isObject: isObject,
   isEmptyObject: isEmptyObject,
@@ -1015,7 +1016,7 @@ var loadJs = function loadJs(url) {
     document.body.appendChild(script);
   });
 };
-var index$3 = {
+var html = {
   getElement: getElement,
   getStyle: getStyle,
   getElementOffsetTop: getElementOffsetTop,
@@ -1157,7 +1158,7 @@ var replaceKeys = function replaceKeys(obj) {
     return acc;
   }, {});
 };
-var index$4 = {
+var object = {
   clone: clone,
   deepClone: deepClone,
   extend: extend,
@@ -1474,7 +1475,7 @@ var sample = function sample(arr) {
   var list = shuffe(arr);
   return list.slice(0, size);
 };
-var index$5 = {
+var array = {
   isArrayLike: isArrayLike,
   flatten: flatten,
   intersection: intersection,
@@ -1950,7 +1951,7 @@ var sortDesc = function sortDesc() {
 }; // bigInteger类型处理
 
 var bigInt = BigNumber;
-var index$6 = {
+var number = {
   sum: sum,
   average: average,
   min: min,
@@ -2059,7 +2060,7 @@ var removeParamFromUrl = function removeParamFromUrl() {
   var paramStr = getJson2Param(json);
   return paramStr ? "".concat(path, "?").concat(paramStr) : path;
 };
-var index$7 = {
+var url = {
   getParam2Json: getParam2Json,
   getJson2Param: getJson2Param,
   getUrlParam: getUrlParam,
@@ -2072,7 +2073,7 @@ var isPlatform = function isPlatform(regexp) {
 };
 
 var isMobile = isPlatform(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i);
-var isPc = !isMobile();
+var isPc = !isMobile;
 var isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 var isIPad = isPlatform(/iPad/gi);
 var isAndroid = isPlatform(/android|adr/gi);
@@ -2085,7 +2086,7 @@ var isWeibo = isPlatform(/weibo/gi);
 var isDevice = function isDevice(regexp) {
   return isPlatform(regexp);
 };
-var index$8 = {
+var platform = {
   isMobile: isMobile,
   isPc: isPc,
   isIOS: isIOS,
@@ -2156,7 +2157,7 @@ var all = function all() {
   getHanlder();
 };
 
-var cookie = {
+var zcookie = {
   defaults: defaults,
   set: set,
   get: get,
@@ -2316,14 +2317,9 @@ function () {
   return Storage;
 }();
 
-var zcookie$1 = cookie;
-var zlocal$1 = localStore;
-var zsession$1 = sessionStore;
-({
-  cookie: zcookie$1,
-  localStore: zlocal$1,
-  sessionStore: Z_BEST_COMPRESSION
-});
+var cookie = zcookie;
+var local = localStore;
+var session = sessionStore;
 
 function _classCallCheck$1(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -3591,7 +3587,7 @@ var ResizeObserver = /** @class */ (function () {
     };
 });
 
-var index$9 = (function () {
+var index = (function () {
     // Export existing implementation if available.
     if (typeof global$1.ResizeObserver !== 'undefined') {
         return global$1.ResizeObserver;
@@ -3700,7 +3696,7 @@ var addResizeListener = function addResizeListener(element, fn) {
 
   if (!el.__resizeListeners__) {
     el.__resizeListeners__ = [];
-    el.__ro__ = new index$9(resizeHandler);
+    el.__ro__ = new index(resizeHandler);
 
     el.__ro__.observe(el);
   }
@@ -3727,15 +3723,29 @@ var removeResizeListener = function removeResizeListener(element, fn) {
   }
 };
 var observer = Observer$1;
-var index$a = {
+var event = {
   addResizeListener: addResizeListener,
   removeResizeListener: removeResizeListener,
   observer: observer
 };
 
-var index$b = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, zurl, {}, zplatform, {}, zcookie, {}, zlocal, {}, zsession, {}, zevent, {
-  zdate: zdate
+var zutil = util;
+var ztype = type;
+var zstring = string;
+var zhtml = html;
+var zarray = array;
+var zobject = object;
+var znumber = number;
+var zurl = url;
+var zplatform = platform;
+var zcookie$1 = cookie;
+var zlocal = local;
+var zsession = session;
+var zevent = event;
+var zdate = Zdate;
+var index$1 = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, znumber, {}, zurl, {}, zplatform, {}, zcookie$1, {}, zlocal, {}, zsession, {}, zevent, {
+  zdate: Zdate
 });
 
-export default index$b;
-export { index$5 as zarray, zcookie$1 as zcookie, Zdate as zdate, index$a as zevent, index$3 as zhtml, zlocal$1 as zlocal, index$6 as znumber, index$4 as zobject, index$8 as zplatform, zsession$1 as zsession, index as zstring, index$2 as ztype, index$7 as zurl, index$1 as zutil };
+export default index$1;
+export { zarray, zcookie$1 as zcookie, zdate, zevent, zhtml, zlocal, znumber, zobject, zplatform, zsession, zstring, ztype, zurl, zutil };
