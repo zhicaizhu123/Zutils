@@ -1,9 +1,57 @@
 # 常用工具类封装
 
+## 目录
+- [常用工具类封装](#%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%B0%81%E8%A3%85)
+  - [前言](#%E5%89%8D%E8%A8%80)
+  - [安装使用](#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8)
+    - [安装](#%E5%AE%89%E8%A3%85)
+    - [引入](#%E5%BC%95%E5%85%A5)
+  - [类型篇](#%E7%B1%BB%E5%9E%8B%E7%AF%87)
+  - [对象篇](#%E5%AF%B9%E8%B1%A1%E7%AF%87)
+  - [数组篇](#%E6%95%B0%E7%BB%84%E7%AF%87)
+  - [日期篇](#%E6%97%A5%E6%9C%9F%E7%AF%87)
+  - [字符串篇](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AF%87)
+  - [数字篇](#%E6%95%B0%E5%AD%97%E7%AF%87)
+  - [Html 篇](#html-%E7%AF%87)
+  - [事件篇](#%E4%BA%8B%E4%BB%B6%E7%AF%87)
+  - [存储篇](#%E5%AD%98%E5%82%A8%E7%AF%87)
+  - [平台判断篇](#%E5%B9%B3%E5%8F%B0%E5%88%A4%E6%96%AD%E7%AF%87)
+  - [链接篇](#%E9%93%BE%E6%8E%A5%E7%AF%87)
+  - [参考项目和文章](#%E5%8F%82%E8%80%83%E9%A1%B9%E7%9B%AE%E5%92%8C%E6%96%87%E7%AB%A0)
+
 ## 前言
 
 由于在实际项目开发中，多个项目会同时需要相同的工具类，于是参考线上的开源项目和技术文章对常用的工具类函数进行封装和拓展；有些工具函数的实现是依赖于其他篇目的工具，读者可以留意。  
 项目地址：[https://github.com/zhicaizhu123/Zutils](https://github.com/zhicaizhu123/Zutils)，欢迎 start ！
+
+## 安装使用
+### 安装
+``` sh
+# 安装依赖
+npm install -S zutilsjs
+```
+### 引入
+``` js
+// 全局引入
+import zutils from 'zutils'
+
+// 按需加载
+import {
+  ztype, // 类型判断模块
+  zarray, // 数组模块
+  znumber, // 数字模块
+  zstring, // 字符串模块
+  zobject, // 对象模块
+  zplatform, // 平台判断模块
+  zcookie, // cookie模块
+  zlocal, // 本地存储localStorage模块
+  zsession, // 本地存储sessionStorage模块
+  zdate, // 日期模块
+  zhtml, // html模块
+  zutil // 其他工具模块
+} from 'zutils'
+
+```
 
 ## 类型篇
 

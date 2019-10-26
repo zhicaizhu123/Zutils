@@ -3749,7 +3749,10 @@
   var zsession = session;
   var zevent = event;
   var zdate = Zdate;
-  var index$1 = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, znumber, {}, zurl, {}, zplatform, {}, zcookie$1, {}, zlocal, {}, zsession, {}, zevent, {
+  var index$1 = _objectSpread2({}, zutil, {}, ztype, {}, zstring, {}, zhtml, {}, zarray, {}, zobject, {}, znumber, {}, zurl, {}, zplatform, {}, zevent, {
+    zcookie: zcookie$1,
+    zlocal: zlocal,
+    zsession: zsession,
     zdate: Zdate
   });
 

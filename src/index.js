@@ -36,9 +36,9 @@ export default {
   ...znumber,
   ...zurl,
   ...zplatform,
-  ...zcookie,
-  ...zlocal,
-  ...zsession,
   ...zevent,
+  zcookie,
+  zlocal,
+  zsession,
   zdate: date
 };
