@@ -8,7 +8,7 @@ import Screenfull from "./screenfull";
  * @param {boolean} leading  leading=false首次不会触发(如果触发了多次)
  * @returns
  */
-export function throttle(func, interval, leading) {
+export const throttle = (func, interval, leading) => {
   let previous = 0;
   let timer = null;
   const handler = function(context, args) {
@@ -28,17 +28,17 @@ export function throttle(func, interval, leading) {
       timer = setTimeout(handler, remaining, this, arguments);
     }
   };
-}
+};
 
 /**
  * 防抖：用于连续事件触发结束后只触发一次
  *
  * @param {Func} func
  * @param {number} wait
- * @param {boolean} immediate 是否已经执行
+ * @param {boolean} immediate 是否立即执行
  * @returns
  */
-export function debounce(func, wait, immediate) {
+export const debounce = (func, wait, immediate) => {
   let timer = null;
   const handler = function(context, args) {
     func.apply(context, args);
@@ -50,7 +50,7 @@ export function debounce(func, wait, immediate) {
     timer && clearTimeout(timer);
     timer = setTimeout(handler, wait, this, arguments);
   };
-}
+};
 
 /**
  * 拦截Promise处理结果以数组形式返回信息，主要用于async/await
@@ -71,8 +71,8 @@ export function debounce(func, wait, immediate) {
  * @param {any} error
  * @returns {Array} 第一个元素为错误信息，第二个元素为返回结果
  */
-export function syncPromise(promise, error) {
-  return promise
+export const syncPromise = (promise, error) =>
+  promise
     .then(data => [null, data])
     .catch(err => {
       if (error) {
@@ -80,7 +80,6 @@ export function syncPromise(promise, error) {
       }
       return [err, undefined];
     });
-}
 
 // requestAnimationFrame和cancelAnimationFrame兼容封装
 export const requestAnimationFrame =
@@ -106,11 +105,10 @@ export const cancelAnimationFrame =
  * @param {*} time
  * @returns
  */
-export function delay(time) {
-  return new Promise(resolve => {
+export const delay = time =>
+  new Promise(resolve => {
     setTimeout(resolve, time);
   });
-}
 
 /**
  * 组合函数
@@ -136,8 +134,8 @@ export function compose(...args) {
  * @param {string} str 需要复制的文本
  * @returns
  */
-export function copy(str) {
-  return new Promise((resolve, reject) => {
+export const copy = str =>
+  new Promise((resolve, reject) => {
     const el = document.createElement("textarea");
     el.value = str;
     el.setAttribute("readonly", "");
@@ -161,14 +159,9 @@ export function copy(str) {
     }
     isSuccess ? resolve() : reject("当前浏览器不支持复制API");
   });
-}
 
 // 是否匹配提供的正则表达式规则
-export function isRule(rule) {
-  return function(val) {
-    return rule.test(val);
-  };
-}
+export const isRule = rule => val => rule.test(val);
 
 // 是否为合法链接
 export const isLink = isRule(
@@ -201,7 +194,7 @@ export const isPost = isRule(/^[1-9]\d{5}(?!\d)$/);
 // 是否为汉字
 export const isCharacters = isRule(/^[\u4e00-\u9fa5]+$/);
 
-// 是否为格式化日期格式
+// 是否为格式化日期
 export const isFormatDate = (val, tag = "-") => {
   const reg = new RegExp(`/^\d{4}${tg}\d{1,2}${tg}\d{1,2}$/`);
   return isRule(reg)(val);

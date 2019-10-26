@@ -5,11 +5,8 @@
  * @param {string} val
  * @returns
  */
-export function camelize(val) {
-  return val.replace(/[-_]+(.)?/g, (match, item) =>
-    item ? item.toUpperCase() : ""
-  );
-}
+export const camelize = val =>
+  val.replace(/[-_]+(.)?/g, (match, item) => (item ? item.toUpperCase() : ""));
 
 /**
  * 转化为中划线值
@@ -18,9 +15,11 @@ export function camelize(val) {
  * @param {string} val
  * @returns
  */
-export function dasherize(val) {
-  return val.replace(/([A-Z])/g, "-$1"), replace(/_+/g, "-").toLowerCase();
-}
+export const dasherize = val =>
+  val
+    .replace(/([A-Z])/g, "-$1")
+    .replace(/_+/g, "-")
+    .toLowerCase();
 
 /**
  * 根据附加属性生成指定条件的正则表达式
@@ -28,7 +27,7 @@ export function dasherize(val) {
  * @param {object} attrs 附加属性
  * @returns {Array}
  */
-function getAttrsReg(attrs) {
+const getAttrsReg = attrs => {
   const attrsReg = [];
   Object.keys(attrs).forEach(key => {
     if (attrs[key]) {
@@ -36,7 +35,7 @@ function getAttrsReg(attrs) {
     }
   });
   return attrsReg;
-}
+};
 
 /**
  * 通过附加属性的筛选获取元素列表
@@ -45,11 +44,11 @@ function getAttrsReg(attrs) {
  * @param {object} attrs 附加属性值
  * @returns {Array}
  */
-function getResultByAttr(list, attrs) {
+const getResultByAttr = (list, attrs) => {
   let result = [...list];
   const attrsReg = getAttrsReg(attrs);
+  const res = [];
   attrsReg.forEach(attrReg => {
-    const res = [];
     result.forEach(item => {
       if (attrReg.test(item)) {
         res.push(item);
@@ -58,7 +57,7 @@ function getResultByAttr(list, attrs) {
     result = res;
   });
   return result;
-}
+};
 
 /**
  * 从文本中获取指定条件的标签
@@ -70,7 +69,7 @@ function getResultByAttr(list, attrs) {
  * attrs: 附加属性添加更快查询解析元素
  * @returns {Array}
  */
-export function getTagfromHtmlString({ source, tag, attrs = {} } = {}) {
+export const getTagfromHtmlString = ({ source, tag, attrs = {} } = {}) => {
   if (!source) {
     console.warn("请添加source字段");
     return [];
@@ -80,7 +79,7 @@ export function getTagfromHtmlString({ source, tag, attrs = {} } = {}) {
     return [];
   }
   const singleTags = "br,hr,img,input,param,meta,link".split(",");
-  let reg = new RegExp(`<${tag}[^<>]*>[\\d\\D]*<\/${tag}>`, "gmi");
+  let reg = new RegExp(`<${tag}[^<>]*>[\\d\\D]*?<\/${tag}>`, "gmi");
   // 判断是否为但标签
   if (singleTags.includes(tag)) {
     reg = new RegExp(`<${tag}[^<>]*\/?>`, "gmi");
@@ -90,7 +89,7 @@ export function getTagfromHtmlString({ source, tag, attrs = {} } = {}) {
     result = getResultByAttr(result, attrs);
   }
   return result || [];
-}
+};
 
 /**
  * 获取html文本中某类元素指定属性的属性值
@@ -103,7 +102,12 @@ export function getTagfromHtmlString({ source, tag, attrs = {} } = {}) {
  * attrs: 附加属性添加更快查询解析元素
  * @returns {Array}
  */
-export function getAttrFromHtmlString({ source, tag, attr, attrs = {} } = {}) {
+export const getAttrFromHtmlString = ({
+  source,
+  tag,
+  attr,
+  attrs = {}
+} = {}) => {
   if (!source) {
     console.warn("请添加source字段");
     return [];
@@ -126,7 +130,7 @@ export function getAttrFromHtmlString({ source, tag, attr, attrs = {} } = {}) {
     return "";
   });
   return attrList;
-}
+};
 
 /**
  * 获取html文本中转化为html后的纯文本信息
@@ -134,9 +138,8 @@ export function getAttrFromHtmlString({ source, tag, attr, attrs = {} } = {}) {
  * @export
  * @param {string} source 需要解析的源文本
  */
-export function getPureTextFromHtmlString(source) {
-  return source.replace(/<style[^>]*>[\d\D]*<\/style>|<[^>]*>/g, "");
-}
+export const getPureTextFromHtmlString = source =>
+  source.replace(/<style[^>]*>[\d\D]*?<\/style>|<[^>]*>/g, "");
 
 /**
  * 转义html
@@ -145,7 +148,7 @@ export function getPureTextFromHtmlString(source) {
  * @param {string} str
  * @returns
  */
-export function escapeHtml(str) {
+export const escapeHtml = str => {
   const hash = {
     "&": "&amp;",
     "<": "&lt;",
@@ -154,7 +157,7 @@ export function escapeHtml(str) {
     '"': "&quot;"
   };
   return str.replace(/[&<>'"]/g, tag => hash[tag] || tag);
-}
+};
 
 export default {
   camelize,

@@ -8,7 +8,7 @@ export const isMobile = isPlatform(
 
 export const isPc = !isMobile();
 
-export const isIPhone = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
+export const isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 
 export const isIPad = isPlatform(/iPad/gi);
 
@@ -26,14 +26,12 @@ export const isQQBrowser = isPlatform(/qq/gi);
 
 export const isWeibo = isPlatform(/weibo/gi);
 
-export const isDevice = function(regexp) {
-  return isPlatform(regexp);
-};
+export const isDevice = regexp => isPlatform(regexp);
 
 export default {
   isMobile,
   isPc,
-  isIPhone,
+  isIOS,
   isIPad,
   isAndroid,
   isChrome,

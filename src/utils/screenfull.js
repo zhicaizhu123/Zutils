@@ -26,11 +26,11 @@ const ScreenfullHash = (function() {
 
 class Screenfull {
   get isFullScreen() {
-    return document[ScreenfullHash["fullscreenElement"]] || docunent.fullscreen;
+    return document[ScreenfullHash.fullscreenElement] || docunent.fullscreen;
   }
 
   get isEnabled() {
-    document[ScreenfullHash["fullscreenEnabled"]];
+    document[ScreenfullHash.fullscreenEnabled];
   }
 
   exit() {
@@ -44,7 +44,7 @@ class Screenfull {
         resolve();
       };
       this.on("fullscreenchange", exitCallback);
-      resolve(document[ScreenfullHash["exitFullscreen"]]()).catch(reject);
+      resolve(document[ScreenfullHash.exitFullscreen]()).catch(reject);
     });
   }
 
@@ -56,7 +56,7 @@ class Screenfull {
         resolve();
       };
       this.on("fullscreenchange", requestCallback);
-      resolve(element[ScreenfullHash["requestFullscreen"]]()).catch(reject);
+      resolve(element[ScreenfullHash.requestFullscreen]()).catch(reject);
     });
   }
 

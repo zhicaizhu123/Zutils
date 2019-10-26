@@ -7,7 +7,7 @@ import { removeKeys } from "../object";
  * @param {string} url
  * @returns
  */
-export function getParam2Json(url = location.href) {
+export const getParam2Json = (url = location.href) => {
   const search = url.substring(url.lastIndexOf("?") + 1);
   const result = {};
   const reg = /([^?&=]+)=([^?&=]*)/g;
@@ -19,7 +19,7 @@ export function getParam2Json(url = location.href) {
     return res;
   });
   return result;
-}
+};
 
 /**
  * 获取链接指定字段名的值
@@ -29,7 +29,7 @@ export function getParam2Json(url = location.href) {
  * @param {Array|string} key 指定获取的字段名
  * @returns {any} 如果参数key为数组则返回对象
  */
-export function getUrlParam(key, url = location.href) {
+export const getUrlParam = (key, url = location.href) => {
   const params = getParam2Json(url);
   if (Array.isArray(key)) {
     let res = {};
@@ -41,14 +41,14 @@ export function getUrlParam(key, url = location.href) {
     return params[key];
   }
   return void 0;
-}
+};
 
 /**
  * @description 转换json为链接参数字符串
  * @param {Object} json
  * @returns {String}
  */
-export function getJson2Param(json) {
+export const getJson2Param = json => {
   if (!json) return "";
   return Object.keys(json)
     .map(key => {
@@ -56,7 +56,7 @@ export function getJson2Param(json) {
       return `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`;
     })
     .join("&");
-}
+};
 
 /**
  * 添加参数到链接上
@@ -66,12 +66,12 @@ export function getJson2Param(json) {
  * @param {object} [params={}] 需要添加的参数
  * @returns
  */
-export function addParam2Url(url = location.href, params = {}) {
+export const addParam2Url = (params = {}, url = location.href) => {
   const path = url.split("?")[0];
   let json = getParam2Json(url);
   const paramStr = getJson2Param({ ...json, ...params });
   return `${path}?${paramStr}`;
-}
+};
 
 /**
  * 删除链接指定的参数
@@ -82,17 +82,17 @@ export function addParam2Url(url = location.href, params = {}) {
  * 如果为字符串时，多个参数需要用英文','分割，如果不传或者传的时空字符串或者空数组则删除全部参数
  * @returns
  */
-export function removeParamFromUrl(url = location.href, params = "") {
+export const removeParamFromUrl = (url = location.href, params = "") => {
   const path = url.split("?")[0];
   if (!params || (Array.isArray(params) && !params.length)) return path;
   let json = getParam2Json(url);
   json = removeKeys(
     json,
-    Array.isArray(params) ? params : /\b\w+\b/g.match(params)
+    Array.isArray(params) ? params : params.match(/\b\w+\b/g)
   );
   const paramStr = getJson2Param(json);
-  return `${path}?${paramStr}`;
-}
+  return paramStr ? `${path}?${paramStr}` : path;
+};
 
 export default {
   getParam2Json,

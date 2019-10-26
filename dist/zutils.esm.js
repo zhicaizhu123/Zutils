@@ -114,11 +114,11 @@ function _nonIterableSpread() {
  * @param {string} val
  * @returns
  */
-function camelize(val) {
+var camelize = function camelize(val) {
   return val.replace(/[-_]+(.)?/g, function (match, item) {
     return item ? item.toUpperCase() : "";
   });
-}
+};
 /**
  * 转化为中划线值
  *
@@ -127,9 +127,9 @@ function camelize(val) {
  * @returns
  */
 
-function dasherize(val) {
-  return val.replace(/([A-Z])/g, "-$1"), replace(/_+/g, "-").toLowerCase();
-}
+var dasherize = function dasherize(val) {
+  return val.replace(/([A-Z])/g, "-$1").replace(/_+/g, "-").toLowerCase();
+};
 /**
  * 根据附加属性生成指定条件的正则表达式
  *
@@ -137,7 +137,7 @@ function dasherize(val) {
  * @returns {Array}
  */
 
-function getAttrsReg(attrs) {
+var getAttrsReg = function getAttrsReg(attrs) {
   var attrsReg = [];
   Object.keys(attrs).forEach(function (key) {
     if (attrs[key]) {
@@ -145,7 +145,7 @@ function getAttrsReg(attrs) {
     }
   });
   return attrsReg;
-}
+};
 /**
  * 通过附加属性的筛选获取元素列表
  *
@@ -155,12 +155,12 @@ function getAttrsReg(attrs) {
  */
 
 
-function getResultByAttr(list, attrs) {
+var getResultByAttr = function getResultByAttr(list, attrs) {
   var result = _toConsumableArray(list);
 
   var attrsReg = getAttrsReg(attrs);
+  var res = [];
   attrsReg.forEach(function (attrReg) {
-    var res = [];
     result.forEach(function (item) {
       if (attrReg.test(item)) {
         res.push(item);
@@ -169,7 +169,7 @@ function getResultByAttr(list, attrs) {
     result = res;
   });
   return result;
-}
+};
 /**
  * 从文本中获取指定条件的标签
  *
@@ -182,7 +182,7 @@ function getResultByAttr(list, attrs) {
  */
 
 
-function getTagfromHtmlString() {
+var getTagfromHtmlString = function getTagfromHtmlString() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       source = _ref.source,
       tag = _ref.tag,
@@ -200,7 +200,7 @@ function getTagfromHtmlString() {
   }
 
   var singleTags = "br,hr,img,input,param,meta,link".split(",");
-  var reg = new RegExp("<".concat(tag, "[^<>]*>[\\d\\D]*</").concat(tag, ">"), "gmi"); // 判断是否为但标签
+  var reg = new RegExp("<".concat(tag, "[^<>]*>[\\d\\D]*?</").concat(tag, ">"), "gmi"); // 判断是否为但标签
 
   if (singleTags.includes(tag)) {
     reg = new RegExp("<".concat(tag, "[^<>]*/?>"), "gmi");
@@ -213,7 +213,7 @@ function getTagfromHtmlString() {
   }
 
   return result || [];
-}
+};
 /**
  * 获取html文本中某类元素指定属性的属性值
  *
@@ -226,7 +226,7 @@ function getTagfromHtmlString() {
  * @returns {Array}
  */
 
-function getAttrFromHtmlString() {
+var getAttrFromHtmlString = function getAttrFromHtmlString() {
   var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       source = _ref2.source,
       tag = _ref2.tag,
@@ -265,7 +265,7 @@ function getAttrFromHtmlString() {
     return "";
   });
   return attrList;
-}
+};
 /**
  * 获取html文本中转化为html后的纯文本信息
  *
@@ -273,9 +273,9 @@ function getAttrFromHtmlString() {
  * @param {string} source 需要解析的源文本
  */
 
-function getPureTextFromHtmlString(source) {
-  return source.replace(/<style[^>]*>[\d\D]*<\/style>|<[^>]*>/g, "");
-}
+var getPureTextFromHtmlString = function getPureTextFromHtmlString(source) {
+  return source.replace(/<style[^>]*>[\d\D]*?<\/style>|<[^>]*>/g, "");
+};
 /**
  * 转义html
  *
@@ -284,7 +284,7 @@ function getPureTextFromHtmlString(source) {
  * @returns
  */
 
-function escapeHtml(str) {
+var escapeHtml = function escapeHtml(str) {
   var hash = {
     "&": "&amp;",
     "<": "&lt;",
@@ -295,7 +295,7 @@ function escapeHtml(str) {
   return str.replace(/[&<>'"]/g, function (tag) {
     return hash[tag] || tag;
   });
-}
+};
 var index = {
   camelize: camelize,
   dasherize: dasherize,
@@ -354,7 +354,7 @@ function () {
 
         _this.on("fullscreenchange", exitCallback);
 
-        resolve(document[ScreenfullHash["exitFullscreen"]]())["catch"](reject);
+        resolve(document[ScreenfullHash.exitFullscreen]())["catch"](reject);
       });
     }
   }, {
@@ -372,7 +372,7 @@ function () {
 
         _this2.on("fullscreenchange", requestCallback);
 
-        resolve(element[ScreenfullHash["requestFullscreen"]]())["catch"](reject);
+        resolve(element[ScreenfullHash.requestFullscreen]())["catch"](reject);
       });
     }
   }, {
@@ -403,12 +403,12 @@ function () {
   }, {
     key: "isFullScreen",
     get: function get() {
-      return document[ScreenfullHash["fullscreenElement"]] || docunent.fullscreen;
+      return document[ScreenfullHash.fullscreenElement] || docunent.fullscreen;
     }
   }, {
     key: "isEnabled",
     get: function get() {
-      document[ScreenfullHash["fullscreenEnabled"]];
+      document[ScreenfullHash.fullscreenEnabled];
     }
   }]);
 
@@ -426,7 +426,7 @@ var Screenfull$1 = new Screenfull();
  * @returns
  */
 
-function throttle(func, interval, leading) {
+var throttle = function throttle(func, interval, leading) {
   var previous = 0;
   var timer = null;
 
@@ -451,17 +451,17 @@ function throttle(func, interval, leading) {
       timer = setTimeout(handler, remaining, this, arguments);
     }
   };
-}
+};
 /**
  * 防抖：用于连续事件触发结束后只触发一次
  *
  * @param {Func} func
  * @param {number} wait
- * @param {boolean} immediate 是否已经执行
+ * @param {boolean} immediate 是否立即执行
  * @returns
  */
 
-function debounce(func, wait, immediate) {
+var debounce = function debounce(func, wait, immediate) {
   var timer = null;
 
   var handler = function handler(context, args) {
@@ -476,7 +476,7 @@ function debounce(func, wait, immediate) {
     timer && clearTimeout(timer);
     timer = setTimeout(handler, wait, this, arguments);
   };
-}
+};
 /**
  * 拦截Promise处理结果以数组形式返回信息，主要用于async/await
  * 如果成功则返回的第一个元素（错误信息）为null，否则为错误信息
@@ -497,7 +497,7 @@ function debounce(func, wait, immediate) {
  * @returns {Array} 第一个元素为错误信息，第二个元素为返回结果
  */
 
-function syncPromise(promise, error) {
+var syncPromise = function syncPromise(promise, error) {
   return promise.then(function (data) {
     return [null, data];
   })["catch"](function (err) {
@@ -507,7 +507,7 @@ function syncPromise(promise, error) {
 
     return [err, undefined];
   });
-} // requestAnimationFrame和cancelAnimationFrame兼容封装
+}; // requestAnimationFrame和cancelAnimationFrame兼容封装
 
 var requestAnimationFrame$1 = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
   animationTimer = setTimeout(callback, 1000 / 60);
@@ -523,11 +523,11 @@ var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAni
  * @returns
  */
 
-function delay(time) {
+var delay = function delay(time) {
   return new Promise(function (resolve) {
     setTimeout(resolve, time);
   });
-}
+};
 /**
  * 组合函数
  *
@@ -562,7 +562,7 @@ function compose() {
  * @returns
  */
 
-function copy(str) {
+var copy = function copy(str) {
   return new Promise(function (resolve, reject) {
     var el = document.createElement("textarea");
     el.value = str;
@@ -587,13 +587,13 @@ function copy(str) {
 
     isSuccess ? resolve() : reject("当前浏览器不支持复制API");
   });
-} // 是否匹配提供的正则表达式规则
+}; // 是否匹配提供的正则表达式规则
 
-function isRule(rule) {
+var isRule = function isRule(rule) {
   return function (val) {
     return rule.test(val);
   };
-} // 是否为合法链接
+}; // 是否为合法链接
 
 var isLink = isRule(/((https|http|ftp|rtsp|mms)?:\/\/)(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+\.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)/); // 是否为合法邮箱
 
@@ -611,7 +611,7 @@ var isWechat = isRule(/^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/); // 是否为邮政编码
 
 var isPost = isRule(/^[1-9]\d{5}(?!\d)$/); // 是否为汉字
 
-var isCharacters = isRule(/^[\u4e00-\u9fa5]+$/); // 是否为格式化日期格式
+var isCharacters = isRule(/^[\u4e00-\u9fa5]+$/); // 是否为格式化日期
 
 var isFormatDate = function isFormatDate(val) {
   var reg = new RegExp("/^d{4}".concat(tg, "d{1,2}").concat(tg, "d{1,2}$/"));
@@ -642,27 +642,27 @@ var index$1 = {
 };
 
 // 获取各数据数据类型
-function isType(type) {
+var isType = function isType(type) {
   return function (val) {
     return Object.prototype.toString.call(val) === "[object ".concat(type, "]");
   };
-} // 判断是否为对象
+}; // 判断是否为对象
 
-function isObject(val) {
-  var type = _typeof(val);
+var isObject = function isObject(val) {
+  return typeof val === "function" || _typeof(val) === "object" && !!val;
+}; // 判断是否为null或undefined
 
-  return type === "function" || type === "object" && !!obj;
-}
-function isEmpty(val) {
+var isEmpty = function isEmpty(val) {
   return isNull(val) || isUndefined(val);
-}
-function isEmptyObject(val) {
-  return isObject(val) && JSON.stringify(val) == "{}";
-} // 判断是否为数组
+}; // 判断是否为{}空对象
 
-function isArray(val) {
+var isEmptyObject = function isEmptyObject(val) {
+  return isObject(val) && JSON.stringify(val) == "{}";
+}; // 判断是否为数组
+
+var isArray = function isArray(val) {
   return Array.isArray ? Array.isArray(val) : isType("Array")(val);
-} // 判断是否为参数列
+}; // 判断是否为参数列
 
 var isArguments = isType("Arguments"); // 判断是否为Null类型
 
@@ -690,13 +690,13 @@ var isError = isType("Error"); // 判断是否为Undefined类型
 
 var isUndefined = isType("Undefined"); // 判断是否为NaN
 
-function isNaN(val) {
-  return isNumber(val) && isNaN(val);
-} // 判断是否为DOM元素
+var isNaN = function isNaN(val) {
+  return Number.isNaN(val);
+}; // 判断是否为DOM元素
 
-function isElement(val) {
+var isElement = function isElement(val) {
   return isObject(HTMLElement) ? val instanceof HTMLElement : isObject(val) && isString(val.nodeName) && val.nodeType === 1;
-}
+};
 var index$2 = {
   isType: isType,
   isObject: isObject,
@@ -727,7 +727,7 @@ var body = document.documentElement || document.body;
  * @returns
  */
 
-function getElement(el) {
+var getElement = function getElement(el) {
   var root = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
   if (el instanceof Window) {
@@ -741,7 +741,7 @@ function getElement(el) {
 
   console.warn("当前元素不存在");
   return null;
-}
+};
 /**
  * 获取元素的样式
  *
@@ -751,11 +751,11 @@ function getElement(el) {
  * @returns
  */
 
-function getStyle(el, style) {
+var getStyle = function getStyle(el, style) {
   var currentEl = getElement(el);
   if (!currentEl) return;
   return currentEl.currentStyle ? currentEl.currentStyle[style] : getComputedStyle(currentEl)[style];
-}
+};
 /**
  * 判断一个元素是否为另一个元素的子元素
  *
@@ -765,12 +765,12 @@ function getStyle(el, style) {
  * @returns
  */
 
-function elementContains(parent, child) {
+var elementContains = function elementContains(parent, child) {
   var childEl = getElement(child);
   var parentEl = getElement(parent);
   if (!childEl || !parentEl) return;
   return parentEl.contains(childEl);
-}
+};
 /**
  * 获取元素相对父元素的距离
  *
@@ -779,7 +779,7 @@ function elementContains(parent, child) {
  * @param {HTMLElement|string|Window} parent
  */
 
-function getElementOffsetTop(el) {
+var getElementOffsetTop = function getElementOffsetTop(el) {
   var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : body;
   var currentEl = getElement(el);
   var parentEl = getElement(parent);
@@ -797,8 +797,8 @@ function getElementOffsetTop(el) {
     isSetPosition = true;
   }
 
-  var offsetTop = el.offsetTop;
-  var p = el.offsetParent;
+  var offsetTop = currentEl.offsetTop;
+  var p = currentEl.offsetParent;
 
   while (p && p !== parentEl && parentEl.contains(p)) {
     if (navigator.userAgent.indexOf("MSIE 8.0") === -1) {
@@ -814,7 +814,7 @@ function getElementOffsetTop(el) {
   }
 
   return offsetTop;
-}
+};
 /**
  * 设置元素滚动
  *
@@ -824,7 +824,7 @@ function getElementOffsetTop(el) {
  * @param {boolean} [isAnimate=true] 是否使用动画
  */
 
-function scrollTo() {
+var scrollTo = function scrollTo() {
   var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
   var position = arguments.length > 1 ? arguments[1] : undefined;
   var isAnimate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
@@ -849,7 +849,7 @@ function scrollTo() {
   }
 
   scrollHandler();
-}
+};
 /**
  * 让目标元素滚动到滚动元素的可视范围
  *
@@ -860,9 +860,8 @@ function scrollTo() {
  * @returns
  */
 
-function scrollToTarget() {
-  var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
-  var target = arguments.length > 1 ? arguments[1] : undefined;
+var scrollToTarget = function scrollToTarget(target) {
+  var el = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : body;
   var isAnimate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   var currentEl = getElement(el);
   var targetEl = getElement(target);
@@ -874,7 +873,7 @@ function scrollToTarget() {
   } else {
     scrollTo(currentEl, offsetTop, isAnimate);
   }
-}
+};
 /**
  * 滚动到顶部
  *
@@ -884,13 +883,13 @@ function scrollToTarget() {
  * @returns
  */
 
-function scrollToTop() {
+var scrollToTop = function scrollToTop() {
   var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
   var isAnimate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   var currentEl = getElement(el);
   if (!currentEl) return;
   scrollTo(currentEl, 0, isAnimate);
-}
+};
 /**
  * 滚动到底部
  *
@@ -900,15 +899,15 @@ function scrollToTop() {
  * @returns
  */
 
-function scrollToBottom() {
+var scrollToBottom = function scrollToBottom() {
   var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : body;
   var isAnimate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   var currentEl = getElement(el);
   if (!currentEl) return;
   scrollTo(currentEl, currentEl.scrollHeight, isAnimate);
-}
+}; // 判断className类型格式是否正确
 
-function checkClassNameType(el, className) {
+var checkClassNameType = function checkClassNameType(el, className) {
   var currentEl = getElement(el);
   if (!currentEl) return;
 
@@ -917,8 +916,9 @@ function checkClassNameType(el, className) {
     return;
   }
 
-  return className;
-}
+  var name = className.match(/\b\w+\b/g) || [];
+  return name[0] || "";
+};
 /**
  * 为元素添加类名
  *
@@ -928,18 +928,18 @@ function checkClassNameType(el, className) {
  */
 
 
-function addClass(el, className) {
+var addClass = function addClass(el, className) {
   var xlassName = checkClassNameType(el, className);
   if (!xlassName) return;
 
   if (el.classList) {
     el.classList.add(xlassName);
   } else {
-    var list = xlassName.match(/\b\w+\b/g);
-    list ? list.push(xlassName) : [];
+    var list = el.className.match(/\b\w+\b/g) || [];
+    list.push(xlassName);
     el.className = list.join(" ");
   }
-}
+};
 /**
  * 移除元素的类名
  *
@@ -948,20 +948,19 @@ function addClass(el, className) {
  * @param {string} className
  */
 
-function removeClass(el, className) {
+var removeClass = function removeClass(el, className) {
   var xlassName = checkClassNameType(el, className);
   if (!xlassName) return;
 
   if (el.classList) {
     el.classList.remove(xlassName);
   } else {
-    var list = xlassName.match(/\b\w+\b/g);
-    list = list ? list.filter(function (item) {
+    var list = el.className.match(/\b\w+\b/g) || [];
+    el.className = list.filter(function (item) {
       return item !== xlassName;
-    }) : [];
-    el.className = list.join(" ");
+    }).join(" ");
   }
-}
+};
 /**
  * 判断是否含有某个类
  *
@@ -971,7 +970,7 @@ function removeClass(el, className) {
  * @returns
  */
 
-function hasClass(el, className) {
+var hasClass = function hasClass(el, className) {
   var xlassName = checkClassNameType(el, className);
   if (!xlassName) return false;
 
@@ -979,9 +978,9 @@ function hasClass(el, className) {
     return el.classList.contains(xlassName);
   }
 
-  var list = xlassName.match(/\b\w+\b/g);
-  return list && list.includes(xlassName);
-}
+  var list = el.className.match(/\b\w+\b/g) || [];
+  return list.includes(xlassName);
+};
 /**
  * 动态加载js文件
  *
@@ -990,8 +989,8 @@ function hasClass(el, className) {
  * @returns {Promise}
  */
 
-function loadJs(url) {
-  return new Promise(function (resolve) {
+var loadJs = function loadJs(url) {
+  return new Promise(function (resolve, reject) {
     var script = document.createElement("script");
     script.type = "text/javascript";
 
@@ -1008,13 +1007,15 @@ function loadJs(url) {
       };
     }
 
+    script.onerror = function () {
+      reject();
+    };
+
     script.src = url;
     document.body.appendChild(script);
   });
-}
+};
 var index$3 = {
-  addResizeListener: addResizeListener,
-  removeResizeListener: removeResizeListener,
   getElement: getElement,
   getStyle: getStyle,
   getElementOffsetTop: getElementOffsetTop,
@@ -1038,8 +1039,8 @@ var index$3 = {
  * @returns
  */
 
-function clone(origin, target) {
-  var result = target || {};
+var clone = function clone(origin) {
+  var result = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   for (var prop in origin) {
     if (origin.hasOwnProperty(prop)) {
@@ -1048,7 +1049,7 @@ function clone(origin, target) {
   }
 
   return result;
-}
+};
 /**
  * 深克隆对象
  *
@@ -1058,7 +1059,7 @@ function clone(origin, target) {
  * @returns
  */
 
-function deepClone(data) {
+var deepClone = function deepClone(data) {
   var weak = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new WeakMap();
   if (_typeof(data) !== "object" || data === null) return data;
   var result;
@@ -1084,7 +1085,7 @@ function deepClone(data) {
   }
 
   return result;
-}
+};
 /**
  * 合并对象
  *
@@ -1092,15 +1093,21 @@ function deepClone(data) {
  * @param {*} src
  */
 
-function extend(target) {
+var extend = function extend(target) {
   for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     args[_key - 1] = arguments[_key];
   }
 
   return Object.assign.apply(Object, [target].concat(args));
-}
+};
+/**
+ * 根据保留/删除类型过滤字段
+ *
+ * @param {*} type
+ * @returns
+ */
 
-function filterKeys(type) {
+var filterKeys = function filterKeys(type) {
   return function (obj) {
     var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
     return Object.keys(obj).reduce(function (acc, key) {
@@ -1111,7 +1118,7 @@ function filterKeys(type) {
       return acc;
     }, {});
   };
-}
+};
 /**
  * 保留给定字段
  *
@@ -1142,14 +1149,14 @@ var removeKeys = filterKeys("remove");
  * @returns
  */
 
-function replaceKeys(obj) {
+var replaceKeys = function replaceKeys(obj) {
   var rules = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var keys = Object.keys(rules);
   return Object.keys(obj).reduce(function (acc, key) {
     acc[keys.includes(key) ? rules[key] : key] = obj[key];
     return acc;
   }, {});
-}
+};
 var index$4 = {
   clone: clone,
   deepClone: deepClone,
@@ -1159,13 +1166,13 @@ var index$4 = {
   replaceKeys: replaceKeys
 };
 
-function forEachType() {
+var forEachType = function forEachType() {
   var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "left";
   return function (arr, cb) {
     var list = type === "left" ? arr : _toConsumableArray(arr).reverse();
     list.forEach(cb);
   };
-}
+};
 /**
  * 判断是否为类数组
  *
@@ -1175,28 +1182,24 @@ function forEachType() {
  */
 
 
-function isArrayLike(val) {
+var isArrayLike = function isArrayLike(val) {
   return "length" in val;
-}
+};
 /**
  * 拉平数组
- *
+ * 说明：level=0 表示为全部层级拉平，默认只拉平第一层级元素
  * @export
  * @param {Array} arr
- * @param {number} [level=1] level=0表示为全部层级拉平
+ * @param {number} [level=1]
  * @returns {Array}
  */
 
-function flatten(arr) {
-  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-  return arr.reduce(function (result, item) {
-    if ((level > 1 || level === 0) && isArray(item)) {
-      return [].concat(_toConsumableArray(result), _toConsumableArray(flatten(item, level > 1 ? level - 1 : 0)));
-    }
-
-    return [].concat(_toConsumableArray(result), [item]);
+var flatten = function flatten(arr) {
+  var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  return arr.reduce(function (a, v) {
+    return a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v);
   }, []);
-}
+}; // 深度拉平
 /**
  * 数组去重
  *
@@ -1205,9 +1208,9 @@ function flatten(arr) {
  * @returns
  */
 
-function unique(arr) {
-  return _toConsumableArray(Set(arr));
-}
+var unique = function unique(arr) {
+  return _toConsumableArray(new Set(arr));
+};
 /**
  * 取两个数组的交集
  *
@@ -1217,12 +1220,12 @@ function unique(arr) {
  * @returns
  */
 
-function intersection(arr1, arr2) {
+var intersection = function intersection(arr1, arr2) {
   var arr = new Set(arr1);
   return arr2.filter(function (item) {
     return arr.has(item);
   });
-}
+};
 /**
  * 取多个数组的交集
  *
@@ -1231,7 +1234,7 @@ function intersection(arr1, arr2) {
  * @returns
  */
 
-function intersectionAll() {
+var intersectionAll = function intersectionAll() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
   }
@@ -1239,7 +1242,7 @@ function intersectionAll() {
   return args.reduce(function (acc, val) {
     return intersection(val, acc);
   });
-}
+};
 /**
  * 多个元素的并集
  *
@@ -1248,13 +1251,13 @@ function intersectionAll() {
  * @returns
  */
 
-function union() {
+var union = function union() {
   for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
   return unique(flatten(args, 2));
-}
+};
 /**
  * 两个数组的差集
  *
@@ -1264,13 +1267,13 @@ function union() {
  * @returns
  */
 
-function difference(arr1, arr2) {
+var difference = function difference(arr1, arr2) {
   var allList = union(arr1, arr2);
   var intersectionList = intersection(arr1, arr2);
   return allList.filter(function (item) {
     return !intersectionList.includes(item);
   });
-}
+};
 /**
  * 多个数组的差集
  *
@@ -1279,7 +1282,7 @@ function difference(arr1, arr2) {
  * @returns
  */
 
-function differenceAll() {
+var differenceAll = function differenceAll() {
   for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     args[_key3] = arguments[_key3];
   }
@@ -1287,10 +1290,10 @@ function differenceAll() {
   return args.reduce(function (acc, val) {
     return difference(val, acc);
   });
-}
+};
 /**
  * 将单层级数组转化为树形结构
- *
+ * 说明：`parentId`为父元素的唯一标识，`id`为元素的唯一标识，默认为`'id'`, `pid`为元素的父元素标识，默认为`'pid'`，`children`为要生成多层级子元素的字段名，默认为`'children'`
  * @export
  * @param {*} arr
  * @param {number} [parentId=0]
@@ -1298,16 +1301,16 @@ function differenceAll() {
  * @returns
  */
 
-function array2Tree(arr) {
+var array2Tree = function array2Tree(arr) {
   var parentId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-      _ref$id = _ref.id,
-      id = _ref$id === void 0 ? "id" : _ref$id,
-      _ref$pid = _ref.pid,
-      pid = _ref$pid === void 0 ? "pid" : _ref$pid,
-      _ref$children = _ref.children,
-      children = _ref$children === void 0 ? "children" : _ref$children;
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$id = _ref2.id,
+      id = _ref2$id === void 0 ? "id" : _ref2$id,
+      _ref2$pid = _ref2.pid,
+      pid = _ref2$pid === void 0 ? "pid" : _ref2$pid,
+      _ref2$children = _ref2.children,
+      children = _ref2$children === void 0 ? "children" : _ref2$children;
 
   return arr.filter(function (item) {
     return item[pid] === parentId;
@@ -1318,17 +1321,32 @@ function array2Tree(arr) {
       children: children
     })));
   });
-}
+};
 /**
- * 数组转为对象
+ * 通过searchId查看完整的链条
  *
  * @export
- * @param {Array} arr
- * @param {string} key // 如果数组元素为对象时指定对象的某个唯一字段为key值
+ * @param {*} searchId
+ * @param {*} [{ id = "id" }={}]
  * @returns
  */
 
-function array2Object(arr, key) {
+var getTreeChainByKey = function getTreeChainByKey(searchId) {
+  var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref4$id = _ref4.id;
+
+  return [];
+};
+/**
+ * 数组转为对象
+ * 说明：如果数组元素为对象时指定对象的某个唯一字段为key值，没有指定则默认为下标索引值
+ * @export
+ * @param {Array} arr
+ * @param {string} key
+ * @returns
+ */
+
+var array2Object = function array2Object(arr, key) {
   if (!arr.length) {
     console.warn("传入数组为空");
     return null;
@@ -1338,7 +1356,7 @@ function array2Object(arr, key) {
     acc[key && val[key] ? val[key] : index] = val;
     return acc;
   }, {});
-}
+};
 /**
  * 类数组转为数组
  *
@@ -1347,14 +1365,14 @@ function array2Object(arr, key) {
  * @returns
  */
 
-function arrayLike2Array(obj) {
+var arrayLike2Array = function arrayLike2Array(obj) {
   if (!isArrayLike(obj)) {
     console.warn("当前传入数据不是类数组");
     return [];
   }
 
   return Array.from(obj);
-} // forEach 元素由 左->右 执行
+}; // forEach 元素由 左->右 执行
 
 var forEach = forEachType(); // forEach 元素由 右->左 执行
 
@@ -1368,13 +1386,13 @@ var forEachRight = forEachType("right");
  * @returns {Array}
  */
 
-function chunk(arr, size) {
+var chunk = function chunk(arr, size) {
   return Array.from({
     length: Math.ceil(arr.length / size)
   }, function (item, index) {
     return arr.slice(size * index, size * (index + 1));
   });
-}
+};
 /**
  * 根据条件获取元素的出现次数
  *
@@ -1384,7 +1402,7 @@ function chunk(arr, size) {
  * @returns
  */
 
-function countBy(arr) {
+var countBy = function countBy(arr) {
   var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (item) {
     return item;
   };
@@ -1394,7 +1412,7 @@ function countBy(arr) {
     acc[item] = acc[item] ? ++acc[item] : 1;
     return acc;
   }, {});
-}
+};
 /**
  * 获取元素的出现次数
  *
@@ -1404,9 +1422,9 @@ function countBy(arr) {
  * @returns
  */
 
-function countByValue(arr, val) {
+var countByValue = function countByValue(arr, val) {
   return countSameBy(arr)[val];
-}
+};
 /**
  * 获取指定元素的下标值
  *
@@ -1415,11 +1433,11 @@ function countByValue(arr, val) {
  * @param {*} val
  */
 
-function indexOfAll(arr, val) {
+var indexOfAll = function indexOfAll(arr, val) {
   return arr.reduce(function (acc, item, index) {
     return item === val ? [].concat(_toConsumableArray(acc), [index]) : acc;
   }, []);
-}
+};
 /**
  * 随机排序
  *
@@ -1428,22 +1446,22 @@ function indexOfAll(arr, val) {
  * @returns
  */
 
-function shuffe(arr) {
+var shuffe = function shuffe(arr) {
   var list = _toConsumableArray(arr);
 
   var len = list.length;
 
   while (len) {
     var i = Math.floor(Math.random() * len--);
-    var _ref4 = [list[i], list[len]];
-    list[len] = _ref4[0];
-    list[i] = _ref4[1];
+    var _ref5 = [list[i], list[len]];
+    list[len] = _ref5[0];
+    list[i] = _ref5[1];
   }
 
   return list;
-}
+};
 /**
- * 随机出去数组数据
+ * 随机取数组中数据
  *
  * @export
  * @param {Array} arr
@@ -1451,11 +1469,11 @@ function shuffe(arr) {
  * @returns
  */
 
-function sample(arr) {
+var sample = function sample(arr) {
   var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
   var list = shuffe(arr);
   return list.slice(0, size);
-}
+};
 var index$5 = {
   isArrayLike: isArrayLike,
   flatten: flatten,
@@ -1475,7 +1493,8 @@ var index$5 = {
   countByValue: countByValue,
   indexOfAll: indexOfAll,
   shuffe: shuffe,
-  sample: sample
+  sample: sample,
+  getTreeChainByKey: getTreeChainByKey
 };
 
 var testDigit = function testDigit(digit) {
@@ -1790,7 +1809,7 @@ BigNumber.prototype.mult = BigNumber.prototype.multiply;
 BigNumber.prototype.pow = BigNumber.prototype.power;
 BigNumber.prototype.valueOf = BigNumber.prototype.toString;
 
-function args2Array(args) {
+var args2Array = function args2Array(args) {
   var params = args;
 
   if (args.length === 1 && isArray(args[0])) {
@@ -1798,15 +1817,24 @@ function args2Array(args) {
   }
 
   return params;
-}
+}; // 升降序
+
 
 function sort(sign, args) {
   return args.sort(function (a, b) {
     return (a - b) * sign;
   });
 }
+/**
+ * 汇总
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
 
-function sum() {
+
+var sum = function sum() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
   }
@@ -1815,56 +1843,119 @@ function sum() {
   return _toConsumableArray(params).reduce(function (acc, val) {
     return acc + val;
   }, 0);
-}
-function average() {
-  return sum.apply(void 0, arguments) / (arguments.length ? length.length : 1);
-}
-function min() {
+};
+/**
+ * 取平均数
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
+
+var average = function average() {
   for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
   var params = args2Array(args);
-  return Math.min.apply(null, params);
-}
-function max() {
+  return sum.apply(void 0, _toConsumableArray(params)) / (params.length ? params.length : 1);
+};
+/**
+ * 取最小值
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
+
+var min = function min() {
   for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     args[_key3] = arguments[_key3];
   }
 
   var params = args2Array(args);
-  return Math.max.apply(null, params);
-}
-function toCurrency(num) {
-  return String(num).replace(/(?!^)(?=(\d{3})+$)/g, ",");
-}
-function fixed(num) {
-  var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-  return isNumber(num) ? num.fixed(size) : num;
-}
-function sortAsc() {
+  return Math.min.apply(null, params);
+};
+/**
+ * 取最大值
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
+
+var max = function max() {
   for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
     args[_key4] = arguments[_key4];
   }
 
   var params = args2Array(args);
-  return sort(1, params);
-}
-function sortDesc() {
+  return Math.max.apply(null, params);
+};
+/**
+ * 转化为货币形式
+ *
+ * @export
+ * @param {*} num
+ * @returns
+ */
+
+var toCurrency = function toCurrency(num) {
+  return String(num).replace(/(?!^)(?=(\d{3})+$)/g, ",");
+};
+/**
+ * 截取小数点后几位
+ *
+ * @export
+ * @param {*} num
+ * @param {number} [size=2]
+ * @returns
+ */
+
+var toFixed = function toFixed(num) {
+  var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  return isNumber(num) ? num.toFixed(size) : num;
+};
+/**
+ * 升序
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
+
+var sortAsc = function sortAsc() {
   for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
     args[_key5] = arguments[_key5];
   }
 
   var params = args2Array(args);
+  return sort(1, params);
+};
+/**
+ * 降序
+ *
+ * @export
+ * @param {*} args
+ * @returns
+ */
+
+var sortDesc = function sortDesc() {
+  for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+    args[_key6] = arguments[_key6];
+  }
+
+  var params = args2Array(args);
   return sort(-1, params);
-}
+}; // bigInteger类型处理
+
 var bigInt = BigNumber;
 var index$6 = {
   sum: sum,
   average: average,
   min: min,
   max: max,
-  fixed: fixed,
+  toFixed: toFixed,
   toCurrency: toCurrency,
   sortAsc: sortAsc,
   sortDesc: sortDesc,
@@ -1879,7 +1970,7 @@ var index$6 = {
  * @returns
  */
 
-function getParam2Json() {
+var getParam2Json = function getParam2Json() {
   var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
   var search = url.substring(url.lastIndexOf("?") + 1);
   var result = {};
@@ -1892,7 +1983,7 @@ function getParam2Json() {
     return res;
   });
   return result;
-}
+};
 /**
  * 获取链接指定字段名的值
  *
@@ -1902,7 +1993,7 @@ function getParam2Json() {
  * @returns {any} 如果参数key为数组则返回对象
  */
 
-function getUrlParam(key) {
+var getUrlParam = function getUrlParam(key) {
   var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : location.href;
   var params = getParam2Json(url);
 
@@ -1917,20 +2008,20 @@ function getUrlParam(key) {
   }
 
   return void 0;
-}
+};
 /**
  * @description 转换json为链接参数字符串
  * @param {Object} json
  * @returns {String}
  */
 
-function getJson2Param(json) {
+var getJson2Param = function getJson2Param(json) {
   if (!json) return "";
   return Object.keys(json).map(function (key) {
     if (json[key] === void 0) return "";
     return "".concat(encodeURIComponent(key), "=").concat(encodeURIComponent(json[key]));
   }).join("&");
-}
+};
 /**
  * 添加参数到链接上
  *
@@ -1940,14 +2031,14 @@ function getJson2Param(json) {
  * @returns
  */
 
-function addParam2Url() {
-  var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
-  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var addParam2Url = function addParam2Url() {
+  var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : location.href;
   var path = url.split("?")[0];
   var json = getParam2Json(url);
   var paramStr = getJson2Param(_objectSpread2({}, json, {}, params));
   return "".concat(path, "?").concat(paramStr);
-}
+};
 /**
  * 删除链接指定的参数
  *
@@ -1958,16 +2049,16 @@ function addParam2Url() {
  * @returns
  */
 
-function removeParamFromUrl() {
+var removeParamFromUrl = function removeParamFromUrl() {
   var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
   var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
   var path = url.split("?")[0];
   if (!params || Array.isArray(params) && !params.length) return path;
   var json = getParam2Json(url);
-  json = removeKeys(json, Array.isArray(params) ? params : /\b\w+\b/g.match(params));
+  json = removeKeys(json, Array.isArray(params) ? params : params.match(/\b\w+\b/g));
   var paramStr = getJson2Param(json);
-  return "".concat(path, "?").concat(paramStr);
-}
+  return paramStr ? "".concat(path, "?").concat(paramStr) : path;
+};
 var index$7 = {
   getParam2Json: getParam2Json,
   getJson2Param: getJson2Param,
@@ -1982,7 +2073,7 @@ var isPlatform = function isPlatform(regexp) {
 
 var isMobile = isPlatform(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i);
 var isPc = !isMobile();
-var isIPhone = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
+var isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 var isIPad = isPlatform(/iPad/gi);
 var isAndroid = isPlatform(/android|adr/gi);
 var isChrome = isPlatform(/Chrome/i);
@@ -1997,7 +2088,7 @@ var isDevice = function isDevice(regexp) {
 var index$8 = {
   isMobile: isMobile,
   isPc: isPc,
-  isIPhone: isIPhone,
+  isIOS: isIOS,
   isIPad: isIPad,
   isAndroid: isAndroid,
   isChrome: isChrome,
@@ -3603,7 +3694,7 @@ var resizeHandler = function resizeHandler(entries) {
  */
 
 
-function addResizeListener$1(element, fn) {
+var addResizeListener = function addResizeListener(element, fn) {
   var el = getElement(element, false);
   if (!el) return;
 
@@ -3615,7 +3706,7 @@ function addResizeListener$1(element, fn) {
   }
 
   el.__resizeListeners__.push(fn);
-}
+};
 /**
  * 销毁resize事件
  *
@@ -3625,7 +3716,7 @@ function addResizeListener$1(element, fn) {
  * @returns
  */
 
-function removeResizeListener$1(element, fn) {
+var removeResizeListener = function removeResizeListener(element, fn) {
   var el = getElement(element, false);
   if (!el || !el.__resizeListeners__) return;
 
@@ -3634,11 +3725,11 @@ function removeResizeListener$1(element, fn) {
   if (!el.__resizeListeners__.length) {
     el.__ro__.disconnect();
   }
-}
+};
 var observer = Observer$1;
 var index$a = {
-  addResizeListener: addResizeListener$1,
-  removeResizeListener: removeResizeListener$1,
+  addResizeListener: addResizeListener,
+  removeResizeListener: removeResizeListener,
   observer: observer
 };
 

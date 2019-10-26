@@ -8,15 +8,14 @@ import { isObject } from "../type";
  * @param {*} target 克隆结果
  * @returns
  */
-export function clone(origin, target) {
-  const result = target || {};
+export const clone = (origin, result = {}) => {
   for (let prop in origin) {
     if (origin.hasOwnProperty(prop)) {
       result[prop] = origin[prop];
     }
   }
   return result;
-}
+};
 
 /**
  * 深克隆对象
@@ -26,7 +25,7 @@ export function clone(origin, target) {
  * @param {*} [hash=new WeakMap()]
  * @returns
  */
-export function deepClone(data, weak = new WeakMap()) {
+export const deepClone = (data, weak = new WeakMap()) => {
   if (typeof data !== "object" || data === null) return data;
   let result;
   const Constructor = data.constructor;
@@ -46,7 +45,7 @@ export function deepClone(data, weak = new WeakMap()) {
     result[key] = isObject(data[key]) ? deepClone(data[key], weak) : data[key];
   }
   return result;
-}
+};
 
 /**
  * 合并对象
@@ -54,20 +53,21 @@ export function deepClone(data, weak = new WeakMap()) {
  * @export
  * @param {*} src
  */
-export function extend(target, ...args) {
-  return Object.assign(target, ...args);
-}
+export const extend = (target, ...args) => Object.assign(target, ...args);
 
-function filterKeys(type) {
-  return function(obj, keys = []) {
-    return Object.keys(obj).reduce((acc, key) => {
-      if (type === "keep" ? keys.includes(key) : !keys.includes(key)) {
-        acc[key] = obj[key];
-      }
-      return acc;
-    }, {});
-  };
-}
+/**
+ * 根据保留/删除类型过滤字段
+ *
+ * @param {*} type
+ * @returns
+ */
+const filterKeys = type => (obj, keys = []) =>
+  Object.keys(obj).reduce((acc, key) => {
+    if (type === "keep" ? keys.includes(key) : !keys.includes(key)) {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {});
 
 /**
  * 保留给定字段
@@ -97,13 +97,13 @@ export const removeKeys = filterKeys("remove");
  * @param {*} [rule={}] 键值对，key 为 原字段，value为替换字段
  * @returns
  */
-export function replaceKeys(obj, rules = {}) {
+export const replaceKeys = (obj, rules = {}) => {
   const keys = Object.keys(rules);
   return Object.keys(obj).reduce((acc, key) => {
     acc[keys.includes(key) ? rules[key] : key] = obj[key];
     return acc;
   }, {});
-}
+};
 
 export default {
   clone,

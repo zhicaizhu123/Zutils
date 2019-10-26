@@ -21,7 +21,7 @@ const resizeHandler = function(entries) {
  * @param {Function} fn
  * @returns
  */
-export function addResizeListener(element, fn) {
+export const addResizeListener = (element, fn) => {
   const el = getElement(element, false);
   if (!el) return;
   if (!el.__resizeListeners__) {
@@ -30,7 +30,7 @@ export function addResizeListener(element, fn) {
     el.__ro__.observe(el);
   }
   el.__resizeListeners__.push(fn);
-}
+};
 
 /**
  * 销毁resize事件
@@ -40,14 +40,14 @@ export function addResizeListener(element, fn) {
  * @param {Function} fn
  * @returns
  */
-export function removeResizeListener(element, fn) {
+export const removeResizeListener = (element, fn) => {
   const el = getElement(element, false);
   if (!el || !el.__resizeListeners__) return;
   el.__resizeListeners__.splice(el.__resizeListeners__.indexOf(fn), 1);
   if (!el.__resizeListeners__.length) {
     el.__ro__.disconnect();
   }
-}
+};
 
 export const observer = Observer;
 

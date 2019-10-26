@@ -9,7 +9,7 @@ const body = document.documentElement || document.body;
  * @param {*} el
  * @returns
  */
-export function getElement(el, root = true) {
+export const getElement = (el, root = true) => {
   if (el instanceof Window) {
     return root ? body : window;
   } else if (isElement(el)) {
@@ -20,7 +20,7 @@ export function getElement(el, root = true) {
   }
   console.warn("当前元素不存在");
   return null;
-}
+};
 
 /**
  * 获取元素的样式
@@ -30,13 +30,13 @@ export function getElement(el, root = true) {
  * @param {string} style
  * @returns
  */
-export function getStyle(el, style) {
+export const getStyle = (el, style) => {
   const currentEl = getElement(el);
   if (!currentEl) return;
   return currentEl.currentStyle
     ? currentEl.currentStyle[style]
     : getComputedStyle(currentEl)[style];
-}
+};
 
 /**
  * 判断一个元素是否为另一个元素的子元素
@@ -46,12 +46,12 @@ export function getStyle(el, style) {
  * @param {*} child
  * @returns
  */
-export function elementContains(parent, child) {
+export const elementContains = (parent, child) => {
   const childEl = getElement(child);
   const parentEl = getElement(parent);
   if (!childEl || !parentEl) return;
   return parentEl.contains(childEl);
-}
+};
 
 /**
  * 获取元素相对父元素的距离
@@ -60,7 +60,7 @@ export function elementContains(parent, child) {
  * @param {HTMLElement|string|Window} el
  * @param {HTMLElement|string|Window} parent
  */
-export function getElementOffsetTop(el, parent = body) {
+export const getElementOffsetTop = (el, parent = body) => {
   const currentEl = getElement(el);
   const parentEl = getElement(parent);
   if (!currentEl || !parentEl) return;
@@ -73,8 +73,8 @@ export function getElementOffsetTop(el, parent = body) {
     parentEl.style.position = "relative";
     isSetPosition = true;
   }
-  let offsetTop = el.offsetTop;
-  let p = el.offsetParent;
+  let offsetTop = currentEl.offsetTop;
+  let p = currentEl.offsetParent;
   while (p && p !== parentEl && parentEl.contains(p)) {
     if (navigator.userAgent.indexOf("MSIE 8.0") === -1) {
       offsetTop += p.clientTop;
@@ -86,7 +86,7 @@ export function getElementOffsetTop(el, parent = body) {
     parentEl.style.position = "static";
   }
   return offsetTop;
-}
+};
 
 /**
  * 设置元素滚动
@@ -96,7 +96,7 @@ export function getElementOffsetTop(el, parent = body) {
  * @param {number} position 目标位置
  * @param {boolean} [isAnimate=true] 是否使用动画
  */
-export function scrollTo(el = body, position, isAnimate = true) {
+export const scrollTo = (el = body, position, isAnimate = true) => {
   // offset > 0 => 目标位置再窗口顶部的上方
   // offset < 0 => 目标位置再窗口顶部的下方
   const currentEl = getElement(el);
@@ -116,7 +116,7 @@ export function scrollTo(el = body, position, isAnimate = true) {
     }
   }
   scrollHandler();
-}
+};
 
 /**
  * 让目标元素滚动到滚动元素的可视范围
@@ -127,7 +127,7 @@ export function scrollTo(el = body, position, isAnimate = true) {
  * @param {boolean} [isAnimate=true]
  * @returns
  */
-export function scrollToTarget(el = body, target, isAnimate = true) {
+export const scrollToTarget = (target, el = body, isAnimate = true) => {
   const currentEl = getElement(el);
   const targetEl = getElement(target);
   if (!currentEl || !targetEl) return;
@@ -137,7 +137,7 @@ export function scrollToTarget(el = body, target, isAnimate = true) {
   } else {
     scrollTo(currentEl, offsetTop, isAnimate);
   }
-}
+};
 
 /**
  * 滚动到顶部
@@ -147,11 +147,11 @@ export function scrollToTarget(el = body, target, isAnimate = true) {
  * @param {boolean} [isAnimate=true] 是否启动动画
  * @returns
  */
-export function scrollToTop(el = body, isAnimate = true) {
+export const scrollToTop = (el = body, isAnimate = true) => {
   const currentEl = getElement(el);
   if (!currentEl) return;
   scrollTo(currentEl, 0, isAnimate);
-}
+};
 
 /**
  * 滚动到底部
@@ -161,21 +161,23 @@ export function scrollToTop(el = body, isAnimate = true) {
  * @param {boolean} [isAnimate=true] 是否启动动画
  * @returns
  */
-export function scrollToBottom(el = body, isAnimate = true) {
+export const scrollToBottom = (el = body, isAnimate = true) => {
   const currentEl = getElement(el);
   if (!currentEl) return;
   scrollTo(currentEl, currentEl.scrollHeight, isAnimate);
-}
+};
 
-function checkClassNameType(el, className) {
+// 判断className类型格式是否正确
+const checkClassNameType = (el, className) => {
   const currentEl = getElement(el);
   if (!currentEl) return;
   if (className && !isString(className)) {
     console.warn("类名必须为字符串请不能为空");
     return;
   }
-  return className;
-}
+  const name = className.match(/\b\w+\b/g) || [];
+  return name[0] || "";
+};
 
 /**
  * 为元素添加类名
@@ -184,17 +186,17 @@ function checkClassNameType(el, className) {
  * @param {HTMLElement|string|Window} el
  * @param {string} className
  */
-export function addClass(el, className) {
+export const addClass = (el, className) => {
   const xlassName = checkClassNameType(el, className);
   if (!xlassName) return;
   if (el.classList) {
     el.classList.add(xlassName);
   } else {
-    const list = xlassName.match(/\b\w+\b/g);
-    list ? list.push(xlassName) : [];
+    const list = el.className.match(/\b\w+\b/g) || [];
+    list.push(xlassName);
     el.className = list.join(" ");
   }
-}
+};
 
 /**
  * 移除元素的类名
@@ -203,17 +205,16 @@ export function addClass(el, className) {
  * @param {HTMLElement|string|Window} el
  * @param {string} className
  */
-export function removeClass(el, className) {
+export const removeClass = (el, className) => {
   const xlassName = checkClassNameType(el, className);
   if (!xlassName) return;
   if (el.classList) {
     el.classList.remove(xlassName);
   } else {
-    let list = xlassName.match(/\b\w+\b/g);
-    list = list ? list.filter(item => item !== xlassName) : [];
-    el.className = list.join(" ");
+    const list = el.className.match(/\b\w+\b/g) || [];
+    el.className = list.filter(item => item !== xlassName).join(" ");
   }
-}
+};
 
 /**
  * 判断是否含有某个类
@@ -223,15 +224,15 @@ export function removeClass(el, className) {
  * @param {string} className
  * @returns
  */
-export function hasClass(el, className) {
+export const hasClass = (el, className) => {
   const xlassName = checkClassNameType(el, className);
   if (!xlassName) return false;
   if (el.classList) {
     return el.classList.contains(xlassName);
   }
-  let list = xlassName.match(/\b\w+\b/g);
-  return list && list.includes(xlassName);
-}
+  let list = el.className.match(/\b\w+\b/g) || [];
+  return list.includes(xlassName);
+};
 
 /**
  * 动态加载js文件
@@ -240,8 +241,8 @@ export function hasClass(el, className) {
  * @param {string} url
  * @returns {Promise}
  */
-export function loadJs(url) {
-  return new Promise(resolve => {
+export const loadJs = url =>
+  new Promise((resolve, reject) => {
     const script = document.createElement("script");
     script.type = "text/javascript";
     if (script.readyState) {
@@ -259,14 +260,14 @@ export function loadJs(url) {
         resolve();
       };
     }
+    script.onerror = function() {
+      reject();
+    };
     script.src = url;
     document.body.appendChild(script);
   });
-}
 
 export default {
-  addResizeListener,
-  removeResizeListener,
   getElement,
   getStyle,
   getElementOffsetTop,
