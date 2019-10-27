@@ -27,7 +27,7 @@ npm install -S zutilsjs
 **2. 引入**
 ``` js
 // 全局引入
-import zutils from 'zutils'
+import zutils from 'zutilsjs'
 
 // 按需加载
 import {
@@ -43,7 +43,7 @@ import {
   zdate, // 日期模块
   zhtml, // html模块
   zutil // 其他工具模块
-} from 'zutils'
+} from 'zutilsjs'
 
 ```
 
