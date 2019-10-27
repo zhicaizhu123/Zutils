@@ -1,23 +1,17 @@
 # 常用工具类封装
 
 ## 目录
-- [常用工具类封装](#%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%B0%81%E8%A3%85)
-  - [前言](#%E5%89%8D%E8%A8%80)
-  - [安装使用](#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8)
-    - [安装](#%E5%AE%89%E8%A3%85)
-    - [引入](#%E5%BC%95%E5%85%A5)
-  - [类型篇](#%E7%B1%BB%E5%9E%8B%E7%AF%87)
-  - [对象篇](#%E5%AF%B9%E8%B1%A1%E7%AF%87)
-  - [数组篇](#%E6%95%B0%E7%BB%84%E7%AF%87)
-  - [日期篇](#%E6%97%A5%E6%9C%9F%E7%AF%87)
-  - [字符串篇](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AF%87)
-  - [数字篇](#%E6%95%B0%E5%AD%97%E7%AF%87)
-  - [Html 篇](#html-%E7%AF%87)
-  - [事件篇](#%E4%BA%8B%E4%BB%B6%E7%AF%87)
-  - [存储篇](#%E5%AD%98%E5%82%A8%E7%AF%87)
-  - [平台判断篇](#%E5%B9%B3%E5%8F%B0%E5%88%A4%E6%96%AD%E7%AF%87)
-  - [链接篇](#%E9%93%BE%E6%8E%A5%E7%AF%87)
-  - [参考项目和文章](#%E5%8F%82%E8%80%83%E9%A1%B9%E7%9B%AE%E5%92%8C%E6%96%87%E7%AB%A0)
+- [前言](#%E5%89%8D%E8%A8%80)
+- [安装使用](#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8)
+- [类型篇](#%E7%B1%BB%E5%9E%8B%E7%AF%87)
+- [对象篇](#%E5%AF%B9%E8%B1%A1%E7%AF%87)
+- [数组篇](#%E6%95%B0%E7%BB%84%E7%AF%87)
+- [Html 篇](#html-%E7%AF%87)
+- [事件篇](#%E4%BA%8B%E4%BB%B6%E7%AF%87)
+- [存储篇](#%E5%AD%98%E5%82%A8%E7%AF%87)
+- [平台判断篇](#%E5%B9%B3%E5%8F%B0%E5%88%A4%E6%96%AD%E7%AF%87)
+- [链接篇](#%E9%93%BE%E6%8E%A5%E7%AF%87)
+- [其他](#%E5%85%B6%E4%BB%96)
 
 ## 前言
 
@@ -25,12 +19,12 @@
 项目地址：[https://github.com/zhicaizhu123/Zutils](https://github.com/zhicaizhu123/Zutils)，欢迎 start ！
 
 ## 安装使用
-### 安装
+**1. 安装**
 ``` sh
 # 安装依赖
 npm install -S zutilsjs
 ```
-### 引入
+**2. 引入**
 ``` js
 // 全局引入
 import zutils from 'zutils'
@@ -55,124 +49,124 @@ import {
 
 ## 类型篇
 
-1. 获取各种数据数据类型
+**1. 获取各种数据数据类型**
 
 ```js
 const isType = type => val =>
   Object.prototype.toString.call(val) === `[object ${type}]`;
 ```
 
-2. 判断是否为对象
+**2. 判断是否为对象**
 
 ```js
 const isObject = val =>
   typeof val === "function" || (typeof val === "object" && !!val);
 ```
 
-3. 判断是否为 null 或 undefined
+**3. 判断是否为 `null` 或 `undefined`**
 
 ```js
 const isEmpty = val => isNull(val) || isUndefined(val);
 ```
 
-4. 判断是否为{}空对象
+**4. 判断是否为`{}`空对象**
 
 ```js
 const isEmptyObject = val => isObject(val) && JSON.stringify(val) == "{}";
 ```
 
-5. 判断是否为数组
+**5. 判断是否为数组**
 
 ```js
 const isArray = val =>
   Array.isArray ? Array.isArray(val) : isType("Array")(val);
 ```
 
-6. 判断是否为参数列
+**6. 判断是否为参数列**
 
 ```js
 const isArguments = isType("Arguments");
 ```
 
-7. 判断是否为 Null 类型
+**7. 判断是否为 `Null` 类型**
 
 ```js
 const isNull = isType("Null");
 ```
 
-8. 判断是否为 Number 类型
+**8. 判断是否为 `Number` 类型**
 
 ```js
 const isNumber = isType("Number");
 ```
 
-9. 判断是否为 String 类型
+**9. 判断是否为 `String` 类型**
 
 ```js
 const isString = isType("String");
 ```
 
-10. 判断是否为 Function 类型
+**10. 判断是否为 `Function` 类型**
 
 ```js
 const isFunction = isType("Function");
 ```
 
-11. 判断是否为 Promise 类型
+**11. 判断是否为 `Promise` 类型**
 
 ```js
 const isPromise = isType("Promise");
 ```
 
-12. 判断是否为 Date 类型
+**12. 判断是否为 `Date` 类型**
 
 ```js
 const isDate = isType("Date");
 ```
 
-13. 判断是否为 RegExp 类型
+**13. 判断是否为 `RegExp` 类型**
 
 ```js
 const isRegExp = isType("RegExp");
 ```
 
-14. 判断是否为 Map 类型
+**14. 判断是否为 `Map` 类型**
 
 ```js
 const isMap = isType("Map");
 ```
 
-15. 判断是否为 Set 类型
+**15. 判断是否为 Set 类型**
 
 ```js
 const isSet = isType("Set");
 ```
 
-16. 判断是否为 Symbol 类型
+**16. 判断是否为 Symbol 类型**
 
 ```js
 const isSymbol = isType("Symbol");
 ```
 
-17. 判断是否为 Error 类型
+**17. 判断是否为 `Error` 类型**
 
 ```js
 const isError = isType("Error");
 ```
 
-18. 判断是否为 Undefined 类型
+**18. 判断是否为 `Undefined` 类型**
 
 ```js
 const isUndefined = isType("Undefined");
 ```
 
-19. 判断是否为 NaN
+**19. 判断是否为 `NaN`**
 
 ```js
 const isNaN = val => Number.isNaN(val);
 ```
 
-20. 判断是否为 DOM 元素
+**20. 判断是否为 DOM 元素**
 
 ```js
 const isElement = val =>
@@ -183,7 +177,7 @@ const isElement = val =>
 
 ## 对象篇
 
-1. 克隆对象(浅克隆)
+**1. 克隆对象(浅克隆)**
 
 ```js
 const clone = (origin, result = {}) => {
@@ -202,7 +196,7 @@ obj === objClone // => false
 obj.info === objClone.info // => true
 ```
 
-2. 深克隆  
+**2. 深克隆**
 > 说明：使用 WeakMap 存储中间数据，避免递归进入死循环导致栈内存溢出了
 
 ```js
@@ -235,7 +229,7 @@ obj === objClone // => false
 obj.info === objClone.info // => false
 ```
 
-3. 合并对象
+**3. 合并对象**
 
 ```js
 const extend = (target, ...args) => Object.assign(target, ...args);
@@ -246,7 +240,7 @@ extend(obj, {email: '123'})
 // => {name: 'ZCoder', info: {name: 'ZCoder'}, email: '123'}
 ```
 
-4. 根据保留/删除(keep/remove)类型过滤字段  
+**4. 根据保留/删除(keep/remove)类型过滤字段**
 > 说明：如果`type='keep'`，则`keys`为要保留的字段名称列表，否则`keys`为要删除的字段名称组成的数组
 
 ```js
@@ -259,7 +253,7 @@ const filterKeys = type => (obj, keys = []) =>
   }, {});
 ```
 
-5. 保留给定字段
+**5. 保留给定字段**
 
 ```js
 const keepKeys = filterKeys("keep");
@@ -272,7 +266,7 @@ keepKeys(
 // => {id: 123, name: 'ZCoder'}
 ```
 
-6. 删除给定字段
+**6. 删除给定字段**
 
 ```js
 const removeKeys = filterKeys("remove");
@@ -285,7 +279,7 @@ keepKeys(
 // => {email: '123'}
 ```
 
-7. 替换对象字段名  
+**7. 替换对象字段名**
 > 说明：`rules` 参数为键值对，key-要替换的字段名，value-新的字段名
 
 ```js
@@ -307,7 +301,7 @@ replaceKeys(
 
 ## 数组篇
 
-1. 从左/右（left/right）遍历数组
+**1. 从左/右（left/right）遍历数组**
 
 ```js
 const forEachType = (type = "left") => (arr, cb) => {
@@ -316,7 +310,7 @@ const forEachType = (type = "left") => (arr, cb) => {
 };
 ```
 
-2. 左遍历
+**2. 左遍历**
 
 ```js
 const forEach = forEachType();
@@ -328,7 +322,7 @@ forEach([1,2,3], (item) => console.log(item))
 // => 3
 ```
 
-3. 右遍历
+**3. 右遍历**
 
 ```js
 const forEachRight = forEachType("right");
@@ -340,7 +334,7 @@ forEachRight([1,2,3], (item) => console.log(item))
 // => 1
 ```
 
-3. 判断是否为类数组
+**3. 判断是否为类数组**
 
 ```js
 const isArrayLike = val => "length" in val;
@@ -350,7 +344,7 @@ isArrayLike({name: 'ZCoder', length: 1}) // => true
 isArrayLike({name: 'ZCoder'}) // => false
 ```
 
-4. 拉平数组  
+**4. 拉平数组**
 > 说明：`depth`为要最多拉平的层级
 
 ```js
@@ -362,7 +356,7 @@ flatten([1,2,3,[4,[1, 2, 3], 5, 6], [7, 8, 9]], 1)
 // => [1, 2, 3, 4, [1, 2, 3], 5, 6, 7, 8, 9]
 ```
 
-5. 深度拉平数组
+**5. 深度拉平数组**
 ``` js
 const deepFlatten = arr => [].concat(...arr.map(v => (Array.isArray(v) ? deepFlatten(v) : v)));
 
@@ -371,7 +365,7 @@ deepFlatten([1,2,3,[4,[1, 2, 3], 5, 6], [7, 8, 9]])
 // => [1, 2, 3, 4, 1, 2, 3, 5, 6, 7, 8, 9]
 ```
 
-5. 数组去重
+**6. 数组去重**
 
 ```js
 const unique = arr => [...new Set(arr)];
@@ -380,7 +374,7 @@ const unique = arr => [...new Set(arr)];
 unique2([1,2,3,4,2,3,1,5 ]) // => [1, 2, 3, 4, 5]
 ```
 
-6. 取两个数组的交集
+**7. 取两个数组的交集**
 
 ```js
 const intersection = (arr1, arr2) => {
@@ -392,7 +386,7 @@ const intersection = (arr1, arr2) => {
 intersection([1,2,3,4,5,6], [1,4,5,9,8]) // => [1, 4, 5]
 ```
 
-7. 取多个数组的交集
+**8. 取多个数组的交集**
 
 ```js
 const intersectionAll = (...args) =>
@@ -402,16 +396,16 @@ const intersectionAll = (...args) =>
 intersectionAll([1,2,3,4,5,6], [1,4,5,9,8], [1, 3, 5]) // => [1, 5]
 ```
 
-8. 多个元素的并集(去重))
+**9. 多个元素的并集(去重))**
 
 ```js
 const union = (...args) => unique(flatten(args, 1));
 
 // 举例：
-union2([1, 2, 3], [3, 4, 5], [4, 5 ,7,8]) // => [1, 2, 3, 4, 5, 7, 8]
+union([1, 2, 3], [3, 4, 5], [4, 5 ,7,8]) // => [1, 2, 3, 4, 5, 7, 8]
 ```
 
-9. 两个数组的差集
+**10. 两个数组的差集**
 
 ```js
 const difference = (arr1, arr2) => {
@@ -424,7 +418,7 @@ const difference = (arr1, arr2) => {
 difference([1, 2, 3], [2, 3, 5, 6]) //=> [1, 5, 6]
 ```
 
-10. 多个数组的差集
+**11. 多个数组的差集**
 
 ```js
 const differenceAll = (...args) =>
@@ -434,7 +428,7 @@ const differenceAll = (...args) =>
 differenceAll([1, 2, 3], [2, 3, 4], [4 ,5, 6]) // => [5, 6, 1]
 ```
 
-11. 将单层级数组转化为树形结构  
+**12. 将单层级数组转化为树形结构**
 > 说明：`parentId`为父元素的唯一标识，`id`为元素的唯一标识，默认为`'id'`, `pid`为元素的父元素标识，默认为`'pid'`，`children`为要生成多层级子元素的字段名，默认为`'children'`
 
 ```js
@@ -455,8 +449,10 @@ array2Tree(
   [
     {id: 1, parent_id: 0, label: '一级'},
     {id: 2, parent_id: 1, label: '二级'},
-    {id: 3, parent_id: 1, label: '二级'}], 0, {pid: 'parent_id'})
-  ]
+    {id: 3, parent_id: 1, label: '二级'}
+  ],
+  0, 
+  {pid: 'parent_id'}
 )
 // => 
 // [
@@ -472,7 +468,7 @@ array2Tree(
 // ]
 ```
 
-12. 树状结构转为一维数组  
+**13. 树状结构转为一维数组**
 > 说明：`id`为每个元素的唯一标识，默认为`'id'`，`children`为多层级的子元素列表字段，默认为`'children'`
 
 ```js
@@ -508,7 +504,7 @@ tree2Array([
 // ]
 ```
 
-13. 数组转为对象  
+**14. 数组转为对象**
 > 说明：如果数组元素为对象时指定对象的某个唯一字段为 key 值，没有指定则默认为下标索引值
 
 ```js
@@ -534,7 +530,7 @@ array2Object(
 // => {"1":{"id":1,"name":"123"},"2":{"id":2,"name":"456"}}
 ```
 
-14. 类数组转为数组
+**15. 类数组转为数组**
 
 ```js
 const arrayLike2Array = obj => {
@@ -550,7 +546,7 @@ arrayLike2Array ({0: '123', 1: '345', length: 2})
 // => ["123", "345"]
 ```
 
-15. 根据给定长度进行分组
+**16. 根据给定长度进行分组**
 
 ```js
 const chunk = (arr, size) =>
@@ -563,7 +559,7 @@ chunk([1, 2, 3 ,4 ,5, 6, 7], 2)
 // => [[1,2],[3,4],[5,6],[7]]
 ```
 
-16. 过滤列表中的空数据
+**17. 过滤列表中的空数据**
 
 ```js
 const compact = arr => arr.filter(Boolean);
@@ -573,7 +569,7 @@ compact([1, , null, 4, '', 5, 0])
 // => [1, 4, 5]
 ```
 
-17. 根据条件获取元素的出现次数
+**18. 根据条件获取元素的出现次数**
 
 ```js
 const countBy = (arr, fn = item => item) =>
@@ -589,7 +585,7 @@ countBy([1, 2 ,5, 6, 7, 2, 4, 5, 7])
 // => {1: 1, 2: 2, 4: 1, 5: 2, 6: 1, 7: 2}
 ```
 
-18. 获取指定元素的出现次数
+**19. 获取指定元素的出现次数**
 
 ```js
 const countByValue = (arr, val) => countBy(arr)[val];
@@ -599,7 +595,7 @@ countByValue([1, 2 ,5, 6, 7, 2, 4, 5, 7], 2) // 获取元素为2的出现次数
 // => 2
 ```
 
-19. 获取指定元素的下标值
+**20. 获取指定元素的下标值**
 
 ```js
 const indexOfAll = (arr, val) =>
@@ -610,7 +606,7 @@ indexOfAll([1, 2 ,5, 6, 7, 2, 4, 5, 7], 7) // 获取7的下标
 // => [4, 8]
 ```
 
-20. 随机排序
+**21. 随机排序**
 
 ```js
 const shuffe = arr => {
@@ -628,7 +624,7 @@ shuffe([1, 2, 3, 4, 5, 6, 7, 8, 9])
 // => [6, 1, 3, 5, 4, 7, 8, 2, 9]
 ```
 
-21. 随机取数组中数据
+**22. 随机取数组中数据**
 > 说明：`size`为取出元素的个数
 ```js
 const sample = (arr, size = 1) => {
@@ -643,11 +639,11 @@ sample ([1, 2, 3, 4, 5, 6, 7, 8, 9], 3)
 
 ## 日期篇
 
-> 可以移步到[https://github.com/zhicaizhu123/Zdate](https://github.com/zhicaizhu123/Zdate)查看更多介绍说明！
+可以移步到[https://github.com/zhicaizhu123/Zdate](https://github.com/zhicaizhu123/Zdate)查看更多介绍说明！
 
 ## 字符串篇
 
-1. 转化为驼峰值
+**1. 转化为驼峰值**
 
 ```js
 const camelize = val =>
@@ -658,7 +654,7 @@ camelize('-webkit-transform') // => "WebkitTransform"
 camelize('webkit-transform') // => "webkitTransform" 
 ```
 
-2. 转化为中划线值
+**2. 转化为中划线值**
 
 ```js
 const dasherize = val =>
@@ -672,7 +668,7 @@ dasherize('WebkitTransform') // => "-webkit-transform"
 dasherize('webkitTransform') // => "webkit-transform"
 ```
 
-3. 根据附加属性生成指定条件的正则表达式
+**3. 根据附加属性生成指定条件的正则表达式**
 > 用于以下 html 文本处理
 
 ```js
@@ -687,7 +683,7 @@ const getAttrsReg = attrs => {
 };
 ```
 
-4. 通过附加属性的筛选获取元素列表
+**4. 通过附加属性的筛选获取元素列表**
 > 说明：用于以下 html 文本处理
 
 ```js
@@ -706,7 +702,7 @@ const getResultByAttr = (list, attrs) => {
 };
 ```
 
-5. 从文本中获取指定条件的标签  
+**5. 从文本中获取指定条件的标签**
 > 说明：
 > - source: 需要解析的源文本
 > - tag: 需要解析元素的 tagName
@@ -772,7 +768,7 @@ getTagfromHtmlString({
 // ]
 ```
 
-6. 获取 html 文本中某类元素指定属性的属性值  
+**6. 获取 html 文本中某类元素指定属性的属性值**
 > 说明：
 > - source: 需要解析的源文本
 > - tag: 需要解析元素的 tagName
@@ -822,7 +818,7 @@ getAttrFromHtmlString({
 // => ["/enen.jpg", "/haha.jpg"]
 ```
 
-7. 获取 html 文本中转化为 html 后的纯文本信息
+**7. 获取 html 文本中转化为 html 后的纯文本信息**
 
 ```js
 const getPureTextFromHtmlString = source =>
@@ -833,7 +829,7 @@ getPureTextFromHtmlString('<div class="container"><img src="/enen.jpg"><div><img
 // => "456"
 ```
 
-8. 转义 html
+**8. 转义 html**
 > 说明：一般用于防止XSS攻击
 ```js
 const escapeHtml = str => {
@@ -854,7 +850,7 @@ escapeHtml('<div class="container"><img src="/enen.jpg"><div><img src="/haha.jpg
 
 ## 数字篇
 
-1. 将参数转为数组
+**1. 将参数转为数组**
 > 如果参数本身为数组且第一个元素也为数组则返回第一个元素（用于 min、max
 、sum）
 
@@ -868,7 +864,7 @@ const args2Array = args => {
 };
 ```
 
-2. 汇总
+**2. 汇总**
 > 说明：可以以数组形式，或多个参数形式参入，如`sum([1, 2, 3])`或`sum(1, 2, 3)`
 ```js
 const sum = (...args) => {
@@ -881,7 +877,7 @@ sum(1, 2, 3) // => 6
 sum([1, 2, 3]) // => 6
 ```
 
-3. 取平均数
+**3. 取平均数**
 > 说明：可以以数组形式，或多个参数形式参入，如`sum([1, 2, 3])`或`sum(1, 2, 3)`
 ```js
 const average = (...args) => {
@@ -894,7 +890,7 @@ average(1, 2, 3) // => 2
 average([1, 2, 3]) // => 2
 ```
 
-4. 取最小值
+**4. 取最小值**
 > 说明：可以以数组形式，或多个参数形式参入，如`sum([1, 2, 3])`或`sum(1, 2, 3)`
 ```js
 const min = (...args) => {
@@ -906,7 +902,7 @@ const min = (...args) => {
 min(3,2,1) // => 1
 ```
 
-5. 取最大值
+**5. 取最大值**
 > 说明：可以以数组形式，或多个参数形式参入，如`sum([1, 2, 3])`或`sum(1, 2, 3)`
 ```js
 const max = (...args) => {
@@ -918,7 +914,7 @@ const max = (...args) => {
 max(3, 2,1) // => 3
 ```
 
-6. 转化为货币形式
+**6. 转化为货币形式**
 
 ```js
 const toCurrency = num => String(num).replace(/(?!^)(?=(\d{3})+$)/g, ",");
@@ -927,7 +923,7 @@ const toCurrency = num => String(num).replace(/(?!^)(?=(\d{3})+$)/g, ",");
 toCurrency(123456789) // => "123,456,789"
 ```
 
-7. 截取小数点后几位
+**7. 截取小数点后几位**
 > 说明：默认截取两位小数
 ```js
 const toFixed = (num, size = 2) => (isNumber(num) ? num.toFixed(size) : num);
@@ -936,7 +932,7 @@ const toFixed = (num, size = 2) => (isNumber(num) ? num.toFixed(size) : num);
 toFixed(1234567.12345, 2) // => 1234567.12
 ```
 
-8. 升序
+**8. 升序**
 
 ```js
 const sortAsc = (...args) => {
@@ -948,7 +944,7 @@ const sortAsc = (...args) => {
 sortAsc(2, 3,1,4,2,4) // => [1, 2, 2, 3, 4, 4]
 ```
 
-9. 降序
+**9. 降序**
 
 ```js
 const sortDesc = (...args) => {
@@ -961,15 +957,15 @@ sortDesc (2, 3,1,4,2,4)
 // => [4, 4, 3, 2, 2, 1]
 ```
 
-10. BigInteger 类型处理
+**10. BigInteger 类型处理**
 > 说明：  
 请移步到[bignumber.js](https://github.com/alexbardas/bignumber.js)查看更多介绍说明。
 
 ## Html 篇
 
-1. 获取元素  
-> 说明：`root`如果为 `true` 则 `el`=`window` 则会转化为 document.documentElement，否则不做处理  
-> `el`可以是`String`，`HTMLElement`，`Window`类型，如`'.user-name'`,`document.documentElemen`，`window`   
+**1. 获取元素** 
+> 说明：`root`如果为 `true` 则 `el`=`window` 则会转化为 document.documentElement，否则不做处理；    
+> `el`可以是`String`，`HTMLElement`，`Window`类型，如`'.user-name'`,`document.documentElemen`，`window`；   
 > 以下html的工具函数的参数`el`，`child`，`parent`， `target`涉及到传入元素相关的遵循这个规则。
 
 ```js
@@ -990,7 +986,7 @@ const getElement = (el, root = true) => {
 };
 ```
 
-2. 获取元素的样式
+**2. 获取元素的样式**
 > 说明：  
 > el：当前元素  
 > style: 要获取样式字段对应的字符串（驼峰值），如："zIndex"
@@ -1004,10 +1000,10 @@ const getStyle = (el, style) => {
 };
 ```
 
-3. 判断一个元素是否为另一个元素的子元素
+**3. 判断一个元素是否为另一个元素的子元素**
 > 说明：  
 > parent：父元素  
-> child：子元素 
+> child：子元素     
 ```js
 const elementContains = (parent, child) => {
   const childEl = getElement(child);
@@ -1017,7 +1013,7 @@ const elementContains = (parent, child) => {
 };
 ```
 
-4. 获取元素相对父元素的距离   
+**4. 获取元素相对父元素的距离**   
 > 说明：  
 > el：子元素  
 > parent: 父元素  
@@ -1051,7 +1047,7 @@ const getElementOffsetTop = (el, parent = body) => {
 };
 ```
 
-5. 设置元素滚动
+**5. 设置元素滚动**
 > 说明：  
 > el: 滚动元素  
 > position: 滚动元素最终的`scrollTop`   
@@ -1083,7 +1079,7 @@ const scrollTo = (el = body, position = 0, isAnimate = true) => {
 scrollTo(document.body, 10, true)
 ```
 
-6. 让目标元素滚动到滚动元素的可视范围
+**6. 让目标元素滚动到滚动元素的可视范围**
 > 说明：  
 > target: 目标元素
 ```js
@@ -1100,7 +1096,7 @@ const scrollToTarget = (target, el = body, isAnimate = true) => {
 };
 ```
 
-7. 滚动到顶部
+**7. 滚动到顶部**
 
 ```js
 const scrollToTop = (el = body, isAnimate = true) => {
@@ -1110,7 +1106,7 @@ const scrollToTop = (el = body, isAnimate = true) => {
 };
 ```
 
-8. 滚动到底部
+**8. 滚动到底部**
 
 ```js
 const scrollToBottom = (el = body, isAnimate = true) => {
@@ -1120,7 +1116,7 @@ const scrollToBottom = (el = body, isAnimate = true) => {
 };
 ```
 
-9. 判断 className 类型格式是否正确
+**9. 判断 className 类型格式是否正确**
 > 说明：  
 > 该函数用于下面的 `addClass` 和 `removeClass` 以及 `hasClass`工具函数
 ```js
@@ -1136,7 +1132,7 @@ const checkClassNameType = (el, className) => {
 };
 ```
 
-10. 为元素添加类名
+**10. 为元素添加类名**
 > 说明：  
 > el: 当前元素  
 > className: 样式类名字符串（单个）
@@ -1155,7 +1151,7 @@ const addClass = (el, className) => {
 };
 ```
 
-11. 移除元素的类名
+**11. 移除元素的类名**
 > 说明：  
 > el: 当前元素  
 > className: 样式类名字符串（单个）
@@ -1173,7 +1169,7 @@ const removeClass = (el, className) => {
 };
 ```
 
-12. 判断是否含有某个类
+**12. 判断是否含有某个类**
 > 说明：  
 > el: 当前元素  
 > className: 样式类名字符串（单个）
@@ -1190,7 +1186,7 @@ const hasClass = (el, className) => {
 };
 ```
 
-13. 动态加载 js 文件（异步方式）
+**13. 动态加载 js 文件（异步方式）**
 
 ```js
 const loadJs = url =>
@@ -1232,7 +1228,7 @@ loadJs('http://www.baidu.com/a.js')
 
 ## 事件篇
 
-1. 监听元素大小改变事件
+**1. 监听元素大小改变事件**
 > 说明：实现代码取于 element-ui 源码的代码片段
 ```js
 import ResizeObserver from "resize-observer-polyfill";
@@ -1271,7 +1267,7 @@ const removeResizeListener = (element, fn) => {
 };
 ```
 
-2. 订阅-发布模式
+**2. 订阅-发布模式**
 
 ```js
 class Observer {
@@ -1327,7 +1323,7 @@ observer.remove('myevent', handler)
 
 > 因为在项目中我们可能需要对同一类型或者同一模块的数据分模块存储于本地，所以以下本地存储的工具类实现类似于命名空间的方式存储数据。
 
-1. localStorage/sessionStorage  
+**1. localStorage/sessionStorage** 
    > 说明：以下只对 localStorage 封装进行讲解，sessionStorage 以此类推。
 
 ```js
@@ -1408,66 +1404,66 @@ store.removeItem('token') // => {userInfo: {name: "ZCoder"}}
 store.clear('token')
 ```
 
-2. cookie   
+**2. cookie**  
 > 说明：cookie的工具类是参考[browser-cookies](https://github.com/voltace/)进行重写，暴露的API于其一致，具体的介绍与使用可以参考[browser-cookies](https://github.com/voltace/)
 
 ## 平台判断篇
-1. 通过正则表达式和userAgent判断平台类型（用于以下工具函数）
+**1. 通过正则表达式和userAgent判断平台类型（用于以下工具函数）**
 ``` js
 const isPlatform = function(regexp) {
   return regexp.test(navigator.userAgent);
 };
 ```
-2. 是否为移动设备
+**2. 是否为移动设备**
 ``` js
 const isMobile = isPlatform(
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
 );
 ```
-3. 是否为iOS
+**3. 是否为iOS**
 ``` js
 const isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 ```
-4. 是否为iPad
+**4. 是否为iPad**
 ``` js
 const isIPad = isPlatform(/iPad/gi);
 ```
-5. 是否为安卓
+**5. 是否为安卓**
 ``` js
 const isAndroid = isPlatform(/android|adr/gi);
 ```
-6. 是否为Chrome浏览器
+**6. 是否为Chrome浏览器**
 ``` js
 const isChrome = isPlatform(/Chrome/i);
 ```
 
-7. 是否为火狐浏览器
+**7. 是否为火狐浏览器**
 ``` js
 const isFirefox = isPlatform(/Firefox/i);
 ```
-8. 是否为Safari浏览器
+**8. 是否为Safari浏览器**
 ``` js
 const isSafari = isPlatform(/Safari/i);
 ```
-9. 是否为QQ浏览器
+**9. 是否为QQ浏览器**
 ``` js
 const isQQBrowser = isPlatform(/qq/gi);
 ```
-10. 是否为微信平台
+**10. 是否为微信平台**
 ``` js
 const isMicroMessenger = isPlatform(/MicroMessenger/i);
 ```
-11. 是否为微博
+**11. 是否为微博**
 ``` js
 const isWeibo = isPlatform(/weibo/gi);
 ```
-12. 其他设备判断
+**12. 其他设备判断**
 ``` js
 const isDevice = (regexp) => isPlatform(regexp);
 ```
 
 ## 链接篇
-1. 将链接参数转为JSON格式返回
+**1. 将链接参数转为JSON格式返回**
 ``` js
 const getParam2Json = (url = location.href) => {
   const search = url.substring(url.lastIndexOf("?") + 1);
@@ -1487,7 +1483,7 @@ const getParam2Json = (url = location.href) => {
 getParam2Json('http://www.baidu.com?name=ZCoder&email=xxx126')
 // => {name: "ZCoder", email: "xxx126"}
 ```
-2. 获取链接指定字段名的值   
+**2. 获取链接指定字段名的值**   
 > 说明：如果参数`key`为字符串数组则返回key-value对象
 ``` js
 const getUrlParam = (key, url = location.href) => {
@@ -1508,7 +1504,7 @@ const getUrlParam = (key, url = location.href) => {
 getUrlParam('name', 'http://www.baidu.com?name=ZCoder&email=xxx126')
 // => "ZCoder"
 ```
-3. 转换JSON为链接参数字符串   
+**3. 转换JSON为链接参数字符串**   
 > 说明：参数`json`为key-value对象，如：{name: 'ZCoder'}
 ``` js
 const getJson2Param = json => {
@@ -1525,7 +1521,7 @@ const getJson2Param = json => {
 getJson2Param({name: 'ZCoder', email: 'xxx126'})
 // => "name=ZCoder&email=xxx126"
 ```
-4. 添加参数到链接上   
+**4. 添加参数到链接上**   
 > 说明：参数`params`为key-value对象，如：{name: 'ZCoder'}
 ``` js
 const addParam2Url = (params = {}, url = location.href) => {
@@ -1539,7 +1535,7 @@ const addParam2Url = (params = {}, url = location.href) => {
 addParam2Url({name: 'ZCoder'}, 'http://www.baidu.com?email=xxx126')
 // => "http://www.baidu.com?email=xxx126&name=ZCoder"
 ```
-5.删除链接指定的参数    
+**5.删除链接指定的参数**   
 > 说明：参数`params`如果为字符串时，多个字段名用英文','连接，如果为字符串数组是，则每个元素对应一个字段名，如果不传或者传的时空字符串或者空数组则删除全部参数
 ``` js
 const removeParamFromUrl = (url = location.href, params = "") => {
@@ -1567,7 +1563,7 @@ removeParamFromUrl3('http://www.baidu.com?name=ZCoder&email=xxx126')
 ```
 
 ## 其他
-1. 节流
+**1. 节流**
 > 说明：用于有连续事件响应，每间隔一定时间触发一次
 > func: 回调
 > wait: 触发长度间隔时间
@@ -1595,7 +1591,7 @@ const throttle = (func, interval, leading) => {
   };
 }
 ```
-2. 防抖
+**2. 防抖**
 > 说明：用于连续事件触发结束后只触发一次
 > func：回调
 > wait：触发长度间隔时间
@@ -1615,7 +1611,7 @@ const debounce = (func, wait, immediate) => {
   };
 }
 ```
-3. 拦截Promise处理结果以数组形式返回信息
+**3. Promise结果以数组形式返回**
 > 说明：主要用于async/await
 > 返回结果的第一个元素为错误信息，第二个元素为返回结果
 > 如果成功则返回的第一个元素（错误信息）为null，否则为错误信息
@@ -1648,7 +1644,7 @@ getResult(error) // => ['失败', undefined]
 
 ```
 
-4. requestAnimationFrame/cancelAnimationFrame 兼容模式
+**4. requestAnimationFrame/cancelAnimationFrame 兼容模式**
 ``` js
 const requestAnimationFrame =
   window.requestAnimationFrame ||
@@ -1667,7 +1663,7 @@ const cancelAnimationFrame =
   };
 ```
 
-5. 延时函数
+**5. 延时函数**
 > 说明：`time`为毫秒级别
 ``` js
 const delay = time =>
@@ -1682,7 +1678,7 @@ delay(3000).then(() => {
 // => 三秒后打印
 ```
 
-6. 组合函数
+**6. 组合函数**
 > 说明：倒序调用
 ``` js
 function compose(...args) {
@@ -1695,7 +1691,7 @@ function compose(...args) {
   };
 }
 ```
-7. 复制到剪切板（异步方式）
+**7. 复制到剪切板（异步方式）**
 ``` js
 const copy = str =>
   new Promise((resolve, reject) => {
@@ -1730,59 +1726,52 @@ copy('内容')
     console.log(err)
   })
 ```
-8. 是否匹配提供的正则表达式规则
+**8. 匹配提供的正则表达式**
 > 说明：用下以下规则判断
 ``` js
 const isRule = rule => val => rule.test(val);
 ```
-9. 是否为合法链接
+**9. 是否为合法链接**
 ``` js
 const isLink = isRule(
   /((https|http|ftp|rtsp|mms)?:\/\/)(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+\.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)/
 );
 ```
-10. 是否为合法邮箱
+**10. 是否为合法邮箱**
 ``` js
 const isEMail = isRule(
   /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
 );
 ```
-11. 是否为合法手机号码
+**11. 是否为合法手机号码**
 ``` js
 const isTel = isRule(/^(\+?0?86-?)?1(3|4|5|6|7|8|9)\d{9}$/)
 ```
-12. 是否为合法固话
+**12. 是否为合法固话**
 ``` js
 const isLandline = isRule(/^(\d{3,4}-)?\d{7,8}$/);
 ```
-13. 是否为合法身份证
+**13. 是否为合法身份证**
 ``` js
 const isIdCard = isRule(/(^\d{15}$)|(^\d{17}([0-9xX])$)/);
 ```
-14. 是否为合法QQ
+**14. 是否为合法QQ**
 ``` js
 const isQQ = isRule(/^[1-9][0-9]{4,11}$/);
 ```
-15. 是否为合法微信
+**15. 是否为合法微信**
 ``` js
 const isWechat = isRule(/^[a-zA-Z][a-zA-Z0-9_-]{5,19}$/);
 ```
-16. 是否为邮政编码
+**16. 是否为邮政编码**
 ``` js
 const isPost = isRule(/^[1-9]\d{5}(?!\d)$/);
 ```
-17. 是否为汉字
+**17. 是否为汉字**
 ``` js
 const isCharacters = isRule(/^[\u4e00-\u9fa5]+$/);
 ```
-18. 是否为格式化日期
-``` js
-const isFormatDate = (val, tag = "-") => {
-  const reg = new RegExp(`/^\d{4}${tg}\d{1,2}${tg}\d{1,2}$/`);
-  return isRule(reg)(val);
-};
-```
-19. 全屏功能
+**18. 全屏功能**
 > 说明：该工具类参考[screenfull](https://github.com/sindresorhus/screenfull.js)开发。
 ``` js
 const ScreenFullAPIList = [
@@ -1876,7 +1865,7 @@ screen.exit() //推出全屏
 ```
 
 
-## 参考项目和文章
+## 参考文章
 
 - [30-seconds-of-code](https://github.com/30-seconds/30-seconds-of-code#isvalidjson)
 - [browser-cookies](https://github.com/voltace/browser-cookies)
