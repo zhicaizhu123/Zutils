@@ -194,12 +194,6 @@ export const isPost = isRule(/^[1-9]\d{5}(?!\d)$/);
 // 是否为汉字
 export const isCharacters = isRule(/^[\u4e00-\u9fa5]+$/);
 
-// 是否为格式化日期
-export const isFormatDate = (val, tag = "-") => {
-  const reg = new RegExp(`/^\d{4}${tg}\d{1,2}${tg}\d{1,2}$/`);
-  return isRule(reg)(val);
-};
-
 // 全屏功能
 export const screenfull = Screenfull;
 
@@ -222,6 +216,5 @@ export default {
   isIdCard,
   isPost,
   isCharacters,
-  isFormatDate,
   screenfull
 };
