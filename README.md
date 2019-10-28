@@ -16,7 +16,7 @@
 ## 前言
 
 由于在实际项目开发中，多个项目会同时需要相同的工具类，于是参考线上的开源项目和技术文章对常用的工具类函数进行封装和拓展；有些工具函数的实现是依赖于其他篇目的工具，读者可以留意。  
-项目地址：[https://github.com/zhicaizhu123/Zutils](https://github.com/zhicaizhu123/Zutils)，欢迎 start ！
+项目地址：[https://github.com/zhicaizhu123/Zutils](https://github.com/zhicaizhu123/Zutils)，欢迎 star ！
 
 ## 安装使用
 **1. 安装**
