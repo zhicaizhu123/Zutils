@@ -14,8 +14,7 @@ export const isEmptyObject = val =>
   isObject(val) && JSON.stringify(val) == "{}";
 
 // 判断是否为数组
-export const isArray = val =>
-  Array.isArray ? Array.isArray(val) : isType("Array")(val);
+export const isArray = val => Array.isArray(val);
 
 // 判断是否为参数列
 export const isArguments = isType("Arguments");

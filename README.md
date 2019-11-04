@@ -78,8 +78,7 @@ const isEmptyObject = val => isObject(val) && JSON.stringify(val) == "{}";
 **5. 判断是否为数组**
 
 ```js
-const isArray = val =>
-  Array.isArray ? Array.isArray(val) : isType("Array")(val);
+const isArray = val => Array.isArray(val)
 ```
 
 **6. 判断是否为参数列**
@@ -529,8 +528,98 @@ array2Object(
 )
 // => {"1":{"id":1,"name":"123"},"2":{"id":2,"name":"456"}}
 ```
+**15. 根据标识获取树状结构的数据链**
+> 说明：  
+> id：需要查找的层级id  
+> tree：树状结构数据  
+> filter：需要筛选的字段  
+> options：字段名匹配规则 
+``` js
+const getTreeChains = ({ id, tree, filter = ["id"], options = {} }) => {
+  let opts = {
+    id: "id",
+    pId: "pId",
+    children: "children"
+  };
+  opts = { ...opts, ...options };
+  let list = tree2Array(tree, {
+    id: opts.id,
+    children: opts.children
+  }).reverse();
+  let currentId = id;
+  list = list.reduce((acc, item) => {
+    if (currentId === item[opts.id]) {
+      const chainItem = filter.reduce((subject, key) => {
+        subject[key] = item[key];
+        return subject;
+      }, {});
+      acc.unshift(chainItem);
+      currentId = item[opts.pId];
+    }
+    return acc;
+  }, []);
+  if (filter.length === 1) {
+    list = list.map(item => item[filter[0]]);
+  }
+  return list;
+};
 
-**15. 类数组转为数组**
+// 举例：
+const treeList = [
+  {
+    id: 1,
+    parentId: 0,
+    name: '层级1'
+    children: [
+      {
+        id: 3,
+        parentId: 1,
+        name: '层级1-1',
+        children: [
+          {
+            id: 5,
+            parentId: 3,
+            name: '层级1-1-1'
+          },
+        ]
+      },
+      {
+        id: 4,
+        parentId: 1,
+        name: '层级1-2'
+      }
+    ]
+  }
+  {
+    id: 2,
+    parentId: 0,
+    name: '层级2'
+  }
+]
+
+treeList(
+  5, 
+  treeList, 
+  ['id'],
+  {
+    pId: "parentId",
+  }
+)
+// => [1, 3, 5]
+
+treeList(
+  5,
+  treeList,
+  ['id', 'name'],
+  {
+    pId: "parentId",
+  }
+)
+
+// => [{id: 1, name: '层级1'}, {id: 3, name: '层级1-1'}, {id: 5, name: '层级1-1-1'}]
+```
+
+**16. 类数组转为数组**
 
 ```js
 const arrayLike2Array = obj => {
@@ -546,7 +635,7 @@ arrayLike2Array ({0: '123', 1: '345', length: 2})
 // => ["123", "345"]
 ```
 
-**16. 根据给定长度进行分组**
+**17. 根据给定长度进行分组**
 
 ```js
 const chunk = (arr, size) =>
@@ -559,7 +648,7 @@ chunk([1, 2, 3 ,4 ,5, 6, 7], 2)
 // => [[1,2],[3,4],[5,6],[7]]
 ```
 
-**17. 过滤列表中的空数据**
+**18. 过滤列表中的空数据**
 
 ```js
 const compact = arr => arr.filter(Boolean);
@@ -569,7 +658,7 @@ compact([1, , null, 4, '', 5, 0])
 // => [1, 4, 5]
 ```
 
-**18. 根据条件获取元素的出现次数**
+**19. 根据条件获取元素的出现次数**
 
 ```js
 const countBy = (arr, fn = item => item) =>
@@ -585,7 +674,7 @@ countBy([1, 2 ,5, 6, 7, 2, 4, 5, 7])
 // => {1: 1, 2: 2, 4: 1, 5: 2, 6: 1, 7: 2}
 ```
 
-**19. 获取指定元素的出现次数**
+**20. 获取指定元素的出现次数**
 
 ```js
 const countByValue = (arr, val) => countBy(arr)[val];
@@ -595,7 +684,7 @@ countByValue([1, 2 ,5, 6, 7, 2, 4, 5, 7], 2) // 获取元素为2的出现次数
 // => 2
 ```
 
-**20. 获取指定元素的下标值**
+**21. 获取指定元素的下标值**
 
 ```js
 const indexOfAll = (arr, val) =>
@@ -606,7 +695,7 @@ indexOfAll([1, 2 ,5, 6, 7, 2, 4, 5, 7], 7) // 获取7的下标
 // => [4, 8]
 ```
 
-**21. 随机排序**
+**22. 随机排序**
 
 ```js
 const shuffe = arr => {
@@ -624,7 +713,7 @@ shuffe([1, 2, 3, 4, 5, 6, 7, 8, 9])
 // => [6, 1, 3, 5, 4, 7, 8, 2, 9]
 ```
 
-**22. 随机取数组中数据**
+**23. 随机取数组中数据**
 > 说明：`size`为取出元素的个数
 ```js
 const sample = (arr, size = 1) => {
@@ -1410,8 +1499,8 @@ store.clear('token')
 ## 平台判断篇
 **1. 通过正则表达式和userAgent判断平台类型（用于以下工具函数）**
 ``` js
-const isPlatform = function(regexp) {
-  return regexp.test(navigator.userAgent);
+const isPlatform = regexp => {
+  return () => regexp.test(navigator.userAgent);
 };
 ```
 **2. 是否为移动设备**
@@ -1420,40 +1509,45 @@ const isMobile = isPlatform(
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
 );
 ```
-**3. 是否为iOS**
+**3. 是否为PC设备**
+``` js
+const isPc = () => !isMobile();
+```
+
+**4. 是否为iOS**
 ``` js
 const isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 ```
-**4. 是否为iPad**
+**5. 是否为iPad**
 ``` js
 const isIPad = isPlatform(/iPad/gi);
 ```
-**5. 是否为安卓**
+**6. 是否为安卓**
 ``` js
 const isAndroid = isPlatform(/android|adr/gi);
 ```
-**6. 是否为Chrome浏览器**
+**7. 是否为Chrome浏览器**
 ``` js
 const isChrome = isPlatform(/Chrome/i);
 ```
 
-**7. 是否为火狐浏览器**
+**8. 是否为火狐浏览器**
 ``` js
 const isFirefox = isPlatform(/Firefox/i);
 ```
-**8. 是否为Safari浏览器**
+**9. 是否为Safari浏览器**
 ``` js
 const isSafari = isPlatform(/Safari/i);
 ```
-**9. 是否为QQ浏览器**
+**10. 是否为QQ浏览器**
 ``` js
 const isQQBrowser = isPlatform(/qq/gi);
 ```
-**10. 是否为微信平台**
+**11. 是否为微信平台**
 ``` js
 const isMicroMessenger = isPlatform(/MicroMessenger/i);
 ```
-**11. 是否为微博**
+**12. 是否为微博**
 ``` js
 const isWeibo = isPlatform(/weibo/gi);
 ```

@@ -18,10 +18,9 @@ export const isArrayLike = val => "length" in val;
 
 /**
  * 拉平数组
- * 说明：level=0 表示为全部层级拉平，默认只拉平第一层级元素
  * @export
  * @param {Array} arr
- * @param {number} [level=1]
+ * @param {number} [depth=1]
  * @returns {Array}
  */
 export const flatten = (arr, depth = 1) =>
@@ -142,15 +141,43 @@ export const tree2Array = (tree, { id = "id", children = "children" } = {}) => {
 };
 
 /**
- * 通过searchId查看完整的链条
+ * 根据标识获取树状结构的数据链
  *
- * @export
- * @param {*} searchId
- * @param {*} [{ id = "id" }={}]
+ * @param {*} [{
+ *   id,
+ *   tree = [],
+ *   filter = ['id'],
+ *   options = {}
+ * }={}]
  * @returns
  */
-export const getTreeChainByKey = (searchId, { id = "id" } = {}) => {
-  return [];
+export const getTreeChains = ({ id, tree, filter = ["id"], options = {} }) => {
+  let opts = {
+    id: "id",
+    pId: "pId",
+    children: "children"
+  };
+  opts = { ...opts, ...options };
+  let list = tree2Array(tree, {
+    id: opts.id,
+    children: opts.children
+  }).reverse();
+  let currentId = id;
+  list = list.reduce((acc, item) => {
+    if (currentId === item[opts.id]) {
+      const chainItem = filter.reduce((subject, key) => {
+        subject[key] = item[key];
+        return subject;
+      }, {});
+      acc.unshift(chainItem);
+      currentId = item[opts.pId];
+    }
+    return acc;
+  }, []);
+  if (filter.length === 1) {
+    list = list.map(item => item[filter[0]]);
+  }
+  return list;
 };
 
 /**
@@ -284,6 +311,7 @@ export const sample = (arr, size = 1) => {
 export default {
   isArrayLike,
   flatten,
+  deepFlatten,
   intersection,
   intersectionAll,
   union,
@@ -301,5 +329,5 @@ export default {
   indexOfAll,
   shuffe,
   sample,
-  getTreeChainByKey
+  getTreeChains
 };

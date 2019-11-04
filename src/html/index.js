@@ -7,6 +7,7 @@ const body = document.documentElement || document.body;
  * 获取元素
  *
  * @param {*} el
+ * @param {*} root window是否转为body
  * @returns
  */
 export const getElement = (el, root = true) => {
@@ -122,8 +123,8 @@ export const scrollTo = (el = body, position, isAnimate = true) => {
  * 让目标元素滚动到滚动元素的可视范围
  *
  * @export
- * @param {HTMLElement|string|Window} [el=body] 滚动元素
  * @param {HTMLElement|string|Window} target 要滚动到的目标元素
+ * @param {HTMLElement|string|Window} [el=body] 滚动元素
  * @param {boolean} [isAnimate=true]
  * @returns
  */

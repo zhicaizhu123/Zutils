@@ -617,12 +617,7 @@
 
   var isPost = isRule(/^[1-9]\d{5}(?!\d)$/); // 是否为汉字
 
-  var isCharacters = isRule(/^[\u4e00-\u9fa5]+$/); // 是否为格式化日期
-
-  var isFormatDate = function isFormatDate(val) {
-    var reg = new RegExp("/^d{4}".concat(tg, "d{1,2}").concat(tg, "d{1,2}$/"));
-    return isRule(reg)(val);
-  }; // 全屏功能
+  var isCharacters = isRule(/^[\u4e00-\u9fa5]+$/); // 全屏功能
 
   var screenfull = Screenfull$1;
   var util = {
@@ -644,7 +639,6 @@
     isIdCard: isIdCard,
     isPost: isPost,
     isCharacters: isCharacters,
-    isFormatDate: isFormatDate,
     screenfull: screenfull
   };
 
@@ -668,7 +662,7 @@
   }; // 判断是否为数组
 
   var isArray = function isArray(val) {
-    return Array.isArray ? Array.isArray(val) : isType("Array")(val);
+    return Array.isArray(val);
   }; // 判断是否为参数列
 
   var isArguments = isType("Arguments"); // 判断是否为Null类型
@@ -731,6 +725,7 @@
    * 获取元素
    *
    * @param {*} el
+   * @param {*} root window是否转为body
    * @returns
    */
 
@@ -861,8 +856,8 @@
    * 让目标元素滚动到滚动元素的可视范围
    *
    * @export
-   * @param {HTMLElement|string|Window} [el=body] 滚动元素
    * @param {HTMLElement|string|Window} target 要滚动到的目标元素
+   * @param {HTMLElement|string|Window} [el=body] 滚动元素
    * @param {boolean} [isAnimate=true]
    * @returns
    */
@@ -1194,10 +1189,9 @@
   };
   /**
    * 拉平数组
-   * 说明：level=0 表示为全部层级拉平，默认只拉平第一层级元素
    * @export
    * @param {Array} arr
-   * @param {number} [level=1]
+   * @param {number} [depth=1]
    * @returns {Array}
    */
 
@@ -1207,6 +1201,14 @@
       return a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v);
     }, []);
   }; // 深度拉平
+
+  var deepFlatten = function deepFlatten(arr) {
+    var _ref;
+
+    return (_ref = []).concat.apply(_ref, _toConsumableArray(arr.map(function (v) {
+      return Array.isArray(v) ? deepFlatten(v) : v;
+    })));
+  };
   /**
    * 数组去重
    *
@@ -1330,19 +1332,85 @@
     });
   };
   /**
-   * 通过searchId查看完整的链条
-   *
+   * 树状结构转为一维数组
+   * 说明：`id`为每个元素的唯一标识，默认为`'id'`，`children`为多层级的子元素列表字段，默认为`'children'`
    * @export
-   * @param {*} searchId
-   * @param {*} [{ id = "id" }={}]
+   * @param {*} tree
+   * @param {*} [{ id = "id", pid = "pid", children = "children" }={}]
    * @returns
    */
 
-  var getTreeChainByKey = function getTreeChainByKey(searchId) {
-    var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-        _ref4$id = _ref4.id;
+  var tree2Array = function tree2Array(tree) {
+    var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref3$id = _ref3.id,
+        id = _ref3$id === void 0 ? "id" : _ref3$id,
+        _ref3$children = _ref3.children,
+        children = _ref3$children === void 0 ? "children" : _ref3$children;
 
-    return [];
+    var list = tree.reduce(function (acc, item) {
+      if (Array.isArray(item[children]) && item[children].length) {
+        return [].concat(_toConsumableArray(acc), [item], _toConsumableArray(tree2Array(item[children], {
+          id: id,
+          children: children
+        })));
+      }
+
+      return [].concat(_toConsumableArray(acc), [item]);
+    }, []);
+    return list.map(function (item) {
+      return removeKeys(item, [children]);
+    });
+  };
+  /**
+   * 根据标识获取树状结构的数据链
+   *
+   * @param {*} [{
+   *   id,
+   *   tree = [],
+   *   filter = ['id'],
+   *   options = {}
+   * }={}]
+   * @returns
+   */
+
+  var getTreeChains = function getTreeChains(_ref4) {
+    var id = _ref4.id,
+        tree = _ref4.tree,
+        _ref4$filter = _ref4.filter,
+        filter = _ref4$filter === void 0 ? ["id"] : _ref4$filter,
+        _ref4$options = _ref4.options,
+        options = _ref4$options === void 0 ? {} : _ref4$options;
+    var opts = {
+      id: "id",
+      pId: "pId",
+      children: "children"
+    };
+    opts = _objectSpread2({}, opts, {}, options);
+    var list = tree2Array(tree, {
+      id: opts.id,
+      children: opts.children
+    }).reverse();
+    var currentId = id;
+    list = list.reduce(function (acc, item) {
+      if (currentId === item[opts.id]) {
+        var chainItem = filter.reduce(function (subject, key) {
+          subject[key] = item[key];
+          return subject;
+        }, {});
+        acc.unshift(chainItem);
+        currentId = item[opts.pId];
+      }
+
+      return acc;
+    }, []);
+
+    if (filter.length === 1) {
+      list = list.map(function (item) {
+        return item[filter[0]];
+      });
+    }
+
+    return list;
   };
   /**
    * 数组转为对象
@@ -1484,6 +1552,7 @@
   var array = {
     isArrayLike: isArrayLike,
     flatten: flatten,
+    deepFlatten: deepFlatten,
     intersection: intersection,
     intersectionAll: intersectionAll,
     union: union,
@@ -1501,7 +1570,7 @@
     indexOfAll: indexOfAll,
     shuffe: shuffe,
     sample: sample,
-    getTreeChainByKey: getTreeChainByKey
+    getTreeChains: getTreeChains
   };
 
   var testDigit = function testDigit(digit) {
@@ -1995,8 +2064,8 @@
    * 获取链接指定字段名的值
    *
    * @export
-   * @param {string} url
    * @param {Array|string} key 指定获取的字段名
+   * @param {string} url
    * @returns {any} 如果参数key为数组则返回对象
    */
 
@@ -2033,8 +2102,8 @@
    * 添加参数到链接上
    *
    * @export
-   * @param {string} [url=location.href]
    * @param {object} [params={}] 需要添加的参数
+   * @param {string} [url=location.href]
    * @returns
    */
 
@@ -2075,11 +2144,15 @@
   };
 
   var isPlatform = function isPlatform(regexp) {
-    return regexp.test(navigator.userAgent);
+    return function () {
+      return regexp.test(navigator.userAgent);
+    };
   };
 
   var isMobile = isPlatform(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i);
-  var isPc = !isMobile;
+  var isPc = function isPc() {
+    return !isMobile();
+  };
   var isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
   var isIPad = isPlatform(/iPad/gi);
   var isAndroid = isPlatform(/android|adr/gi);

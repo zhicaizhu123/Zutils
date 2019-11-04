@@ -1,12 +1,12 @@
-const isPlatform = function(regexp) {
-  return regexp.test(navigator.userAgent);
+const isPlatform = regexp => {
+  return () => regexp.test(navigator.userAgent);
 };
 
 export const isMobile = isPlatform(
   /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
 );
 
-export const isPc = !isMobile;
+export const isPc = () => !isMobile();
 
 export const isIOS = isPlatform(/\(i[^;]+;( U;)? CPU.+Mac OS X/gi);
 

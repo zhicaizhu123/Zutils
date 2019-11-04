@@ -25,8 +25,8 @@ export const getParam2Json = (url = location.href) => {
  * 获取链接指定字段名的值
  *
  * @export
- * @param {string} url
  * @param {Array|string} key 指定获取的字段名
+ * @param {string} url
  * @returns {any} 如果参数key为数组则返回对象
  */
 export const getUrlParam = (key, url = location.href) => {
@@ -62,8 +62,8 @@ export const getJson2Param = json => {
  * 添加参数到链接上
  *
  * @export
- * @param {string} [url=location.href]
  * @param {object} [params={}] 需要添加的参数
+ * @param {string} [url=location.href]
  * @returns
  */
 export const addParam2Url = (params = {}, url = location.href) => {
