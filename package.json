@@ -1,6 +1,6 @@
 {
   "name": "zutilsjs",
-  "version": "1.0.42",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/zutils.esm.js",
   "scripts": {
