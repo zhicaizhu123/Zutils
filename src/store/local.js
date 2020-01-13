@@ -3,7 +3,7 @@ import { removeKeys } from "../object";
 const Store = window.localStorage;
 const storeMap = new Map();
 
-function localStore(namespaced = "zstore") {
+function localStore (namespaced = "zstore") {
   if (storeMap.has(namespaced)) {
     return storeMap.get(namespaced);
   }
@@ -18,7 +18,7 @@ class Storage {
     this.init();
   }
 
-  init() {
+  init () {
     try {
       const data = Store.getItem(this.namespaced);
       if (data) {
@@ -31,27 +31,27 @@ class Storage {
     }
   }
 
-  saveState() {
+  saveState () {
     Store.setItem(this.namespaced, JSON.stringify(this.state));
   }
 
-  setItem(key, data) {
+  setItem (key, data) {
     this.state[key] = data;
     this.saveState();
     return this.state;
   }
 
-  getItem(key) {
+  getItem (key) {
     return this.state[key];
   }
 
-  removeItem(key) {
+  removeItem (key) {
     this.state = removeKeys(this.state, [key]);
-    this.setState();
+    this.saveStatei();
     return this.state;
   }
 
-  clear() {
+  clear () {
     this.state = {};
     Store.removeItem(this.namespaced);
   }
